@@ -1,0 +1,9 @@
+Flask
+Flask-RESTful
+Flask-SQLAlchemy
+SQLAlchemy
+Werkzeug
+marshmallow
+openai
+Jinja2
+requests   # (externe API's aanroept)
