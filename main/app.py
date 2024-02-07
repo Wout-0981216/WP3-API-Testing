@@ -1,0 +1,14 @@
+from flask import Flask
+from auth import auth_blueprint
+
+
+app = Flask(__name__)
+
+app.secret_key = 'super secret key'
+app.register_blueprint(auth_blueprint)
+
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
