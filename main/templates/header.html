@@ -1,0 +1,33 @@
+{% block head %}
+<script src="{{ url_for('static', filename='javascript/script.js') }}"></script>
+<link href="{{ url_for('static', filename='css/header.css') }}" rel="stylesheet">
+{% endblock %}
+
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <img class="bi me-2 header-image" src="#">
+            <span class="fs-4">Accessibility hub</span>
+        </a>
+
+        {% if show_navigation %}
+            <nav>
+                <ul class="nav nav-pills">
+                    <li class=""><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+                    <li><a href="{{ url_for('#') }}" class="nav-link" aria-current="page">#</a></li>
+                    <li class="nav-item">
+                        <a href="#">Log uit</a>
+                    </li>
+                </ul>
+            </nav>
+        {% endif %}
+    </header>
+
+    <div class="messagesbox">
+        {% if request.path != url_for('auth.index') %}
+            {% for message in get_flashed_messages() %}
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
