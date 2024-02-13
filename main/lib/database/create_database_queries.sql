@@ -94,3 +94,10 @@ CREATE TABLE IF NOT EXISTS Inschrijving_ervaringsdeskundige_onderzoek (
   FOREIGN KEY ("beheerder_id") REFERENCES Beheerder("id"),
   FOREIGN KEY ("onderzoek_id") REFERENCES Onderzoek("id")
 );
+INSERT INTO Beperking ('beperking', 'type_beperking') VALUES ('Doof','Auditieve Beperkingen'),('Slechthorend','Auditieve Beperkingen'),('Doofblind', 'Auditieve Beperkingen'),
+('Blind','Visuele Beperkingen'),('Slechtziend','Visuele Beperkingen'),('Kleurenblind','Visuele Beperkingen'),('Doofblind','Visuele Beperkingen'),
+('Amputatie en mismaaktheid', 'Motorische / Lichamelijke Beperkingen'),('Artritus', 'Motorische / Lichamelijke Beperkingen'),('Fibromyalgie', 'Motorische / Lichamelijke Beperkingen'),
+('Reuma', 'Motorische / Lichamelijke Beperkingen'),('Verminderde handvaardigheid', 'Motorische / Lichamelijke Beperkingen'),('Spierdystrofie', 'Motorische / Lichamelijke Beperkingen'),
+('RSI', 'Motorische / Lichamelijke Beperkingen'),('Tremor en Spasmen', 'Motorische / Lichamelijke Beperkingen'),('Quadriplegie of tetraplegie', 'Motorische / Lichamelijke Beperkingen'),
+('ADHD','Cognitieve / Neurologische Beperkingen'),('Autisme','Cognitieve / Neurologische Beperkingen'),('Leerstoornis','Cognitieve / Neurologische Beperkingen'),
+('Geheugen beperking','Cognitieve / Neurologische Beperkingen'),('Epilepsie','Cognitieve / Neurologische Beperkingen'),('Migraine','Cognitieve / Neurologische Beperkingen')
