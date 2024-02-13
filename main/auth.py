@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from database_functions import insert_ervaringsdeskundige_into_database
+from database_functions import insert_ervaringsdeskundige_into_database, select_type_beperkingen_from_database, select_beperking_from_database_by_type
 
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -18,7 +18,13 @@ def logout():
 
 @auth_blueprint.route("/registration", methods=['GET'])
 def registration():
-    return render_template('register.html')
+    beperking_typen = select_type_beperkingen_from_database()
+    beperking_dict = {}
+    for beperking_typen in beperking_typen:
+        beperkingen = select_beperking_from_database_by_type(beperking_typen[0])
+        beperking_dict[beperking_typen] = beperkingen
+ 
+    return render_template('register.html', beperking_dict=beperking_dict)
 
 @auth_blueprint.route("/registration", methods=['POST'])
 def add_registration():

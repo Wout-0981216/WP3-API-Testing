@@ -4,6 +4,10 @@
   padding: 30px;
 }
 
-.input-group {
+form {
+  text-align: center;
+}
+
+.form-group {
   margin-bottom: 25px;
 }

@@ -31,7 +31,7 @@
                       <input type="radio" id="female" name="sex" value="vrouw">
                       <label for="female">Vrouw</label>
                       <input type="radio" id="other" name="sex" value="other">
-                      <label for="other">Other</label>
+                      <label for="other">Anders</label>
                   </div>
                   <div class="form-group">
                     <label class="form-label" for="email">Email</label>
@@ -49,7 +49,7 @@
                     <label class="form-label" for="phonenumber">Telefoonnummer</label>
                     <input type="tel" id="phonenumber" name="phonenumber" required>
                   </div>
-                  <div>
+                  <div class="form-group">
                     <label class="form-label" for="birthdate">Geboortedatum</label>
                     <input type="date" id="birthdate" name="birthdate" required>
                   </div>
@@ -68,16 +68,16 @@
                     <input type="radio" id="no" name="guardian" value="0">
                     <label for="no">Nee</label>
                   </div>
-                  <div class="form-group" id="guardian_inputs">
-                    <div>
+                  <div id="guardian_inputs">
+                    <div class="form-group">
                       <label class="form-label" for="name_guardian">Naam voogd</label>
                       <input type="text" id="name_guardian" name="name_guardian">
                     </div>
-                    <div>
+                    <div class="form-group">
                       <label class="form-label" for="email_guardian">Voogd email</label>
                       <input type="email" id="email_guardian" name="email_guardian">
                     </div>
-                    <div>
+                    <div class="form-group">
                       <label class="form-label" for="phonenumber_guardian">Voogd Telefoonnummer</label>
                       <input type="tel" id="phonenumber_guardian" name="phonenumber_guardian">
                     </div>
@@ -93,6 +93,17 @@
                   <div class="form-group">
                     <label class="form-label" for="particularities_availability">Bijzonderheden beschikbaarheid</label>
                     <input type="text" id="particularities_availability" name="particularities_availability">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="disability">Beperking</label>
+                    <select name="disability" id="disability">
+                      {% for beperking_type in beperking_dict %}
+                      <optgroup label="{{ beperking_type[0] }}"> {{ beperking_type[0] }}</optgroup>
+                        {% for beperking in beperking_dict[beperking_type] %}
+                        <option value="{{ beperking[1] }}">{{ beperking[0] }}</option>
+                        {% endfor %}
+                      {% endfor%}
+                    </select>
                   </div>
                   <input type="submit" value="Submit">
                 </form>

@@ -39,6 +39,7 @@ def insert_ervaringsdeskundige_into_database(form):
     status = "nieuw"
     beheerder_id = None
     datum_status_update = None
+    beperking = form.get('disability')
     try:
       connection = get_db()
       cursor = connection.cursor()
@@ -58,6 +59,35 @@ def insert_ervaringsdeskundige_into_database(form):
     finally:
         if connection:
             cursor.close()
+            connection = get_db()
+            cursor = connection.cursor()
+            cursor.execute("""
+                            SELECT id FROM Ervaringsdeskundige WHERE gebruikersnaam == ?
+                            """, (gebruikersnaam,))
+            id = cursor.fetchone()
+            cursor.close()
+            insert_ervaringsdeskundige_beperking_into_database(id[0], beperking)
             return msg
 
+def insert_ervaringsdeskundige_beperking_into_database(id, beperking):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute('INSERT INTO Ervaringsdeskundige_beperking (ervaringsdeskundige_id, beperking_id) VALUES (?,?)',(id,beperking,))
+    connection.commit()
+    cursor.close()
 
+def select_type_beperkingen_from_database():
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute('SELECT type_beperking FROM beperking')
+    type_beperkingen = cursor.fetchall()
+    cursor.close()
+    return type_beperkingen
+
+def select_beperking_from_database_by_type(type):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute('SELECT beperking, id FROM beperking WHERE type_beperking = ?',(type,))
+    beperkingen = cursor.fetchall()
+    cursor.close()
+    return beperkingen
