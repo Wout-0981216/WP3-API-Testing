@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS Organisatie (
-  "id" integer PRIMARY KEY,
+  id integer PRIMARY KEY AUTOINCREMENT,
   "aam" varchar,
   "type" varchar,
   "website" varchar,
@@ -10,12 +10,12 @@ CREATE TABLE IF NOT EXISTS Organisatie (
   "overige_details" varchar
 );
 CREATE TABLE IF NOT EXISTS Beperking (
-  "id" integer PRIMARY KEY,
+  "id" integer PRIMARY KEY AUTOINCREMENT,
   "beperking" varchar,
   "type_beperking" varchar
 );
 CREATE TABLE IF NOT EXISTS Beheerder (
-  "id" integer PRIMARY KEY,
+  "id" integer PRIMARY KEY AUTOINCREMENT,
   "gebuikersnaam" varchar UNIQUE,
   "wachtwoord" varchar,
   "voornaam" varchar,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS Beheerder (
   "team" varchar
 );
 CREATE TABLE IF NOT EXISTS Onderzoek (
-  "id" integer PRIMARY KEY,
+  "id" integer PRIMARY KEY AUTOINCREMENT,
   "titel" varchar,
   "beschikbaar" integer,
   "beschrijving" varchar,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Onderzoek (
   FOREIGN KEY ("organisatie_id") REFERENCES Organisatie("id")
 );
 CREATE TABLE IF NOT EXISTS Ervaringsdeskundige (
-  "id" integer PRIMARY KEY,
+  "id" integer PRIMARY KEY AUTOINCREMENT,
   "voornaam" varchar,
   "achternaam" varchar,
   "postcode" varchar,
@@ -63,14 +63,14 @@ CREATE TABLE IF NOT EXISTS Ervaringsdeskundige (
   "telefoonnummer_voogd" integer,
   "voorkeur_benadering" varchar,
   "type_onderzoek" varchar,
-  "bijzonderheden_beschikbaarheid" varchar
+  "bijzonderheden_beschikbaarheid" varchar,
   "status" varchar,
   "beheerder_id" integer,
   "datum_status_update" timestamp,
   FOREIGN KEY ("beheerder_id") REFERENCES Beheerder("id")
 );
 CREATE TABLE IF NOT EXISTS Onderzoeks_vraag (
-  "id" integer PRIMARY KEY,
+  "id" integer PRIMARY KEY AUTOINCREMENT,
   "titel" varchar,
   "vraag" text,
   "onderzoek_id" integer,
