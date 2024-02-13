@@ -14,3 +14,7 @@ def logout():
     session.clear()
     flash("U bent succesvol uitgelogd")
     return redirect(url_for("auth.index"))
+
+@auth_blueprint.route("/registration", methods=['GET','POST'])
+def registration():
+    return render_template('register.html')
