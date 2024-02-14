@@ -16,6 +16,7 @@ def logout():
     flash("U bent succesvol uitgelogd")
     return redirect(url_for("auth.index"))
 
+
 @auth_blueprint.route("/registration", methods=['GET'])
 def registration():
     beperking_typen = select_type_beperkingen_from_database()
@@ -26,8 +27,19 @@ def registration():
  
     return render_template('register.html', beperking_dict=beperking_dict)
 
+
 @auth_blueprint.route("/registration", methods=['POST'])
 def add_registration():
     msg = insert_ervaringsdeskundige_into_database(request.form)
     flash(msg)
     return render_template('register.html')
+
+
+@auth_blueprint.route("/login-beheerder", methods=['GET', 'POST'])
+def login_beheerder():
+    return render_template('login_beheerder.html')
+
+
+@auth_blueprint.route("/login-ervaringsdeskundige", methods=['GET', 'POST'])
+def login_evd():
+    return render_template('login_evd.html')
