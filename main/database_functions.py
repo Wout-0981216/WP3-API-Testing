@@ -91,3 +91,6 @@ def select_beperking_from_database_by_type(type):
     beperkingen = cursor.fetchall()
     cursor.close()
     return beperkingen
+
+
+
