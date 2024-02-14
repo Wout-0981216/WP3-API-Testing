@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block head %}
+<link href="/static/css/register.css" rel="stylesheet">
+<script src="/static/javascript/javascript.js"></script>
+{% endblock %}
+{% block content %}
+
+<h1 class="row justify-content-center">Registratie Ervaringsdeskundige</h1>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+      <div class="col-md-6">
+          <div class="card">
+              <div class="card-body">
+                <form action="{{ url_for('auth.registration') }}" method="POST">
+                  <div class="form-group">
+                      <label class="form-label" for="firstname">Voornaam</label>
+                      <input type="text" id="firstname" name="firstname" required>
+                  </div>
+                  <div class="form-group">
+                      <label class="form-label" for="lastname">Achternaam</label>
+                      <input type="text" id="lastname" name="lastname" required>
+                  </div>
+                  <div class="form-group">
+                      <label class="form-label" for="postcode">Postcode</label>
+                      <input type="text" id="postcode" name="postcode" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Geslacht</label>
+                      <input type="radio" id="male" name="sex" value="man">
+                      <label for="male">Man</label>
+                      <input type="radio" id="female" name="sex" value="vrouw">
+                      <label for="female">Vrouw</label>
+                      <input type="radio" id="other" name="sex" value="other">
+                      <label for="other">Anders</label>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="username">Gebruikersnaam</label>
+                    <input type="text" id="username" name="username" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="password">Wachtwoord</label>
+                    <input type="text" id="password" name="password" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="phonenumber">Telefoonnummer</label>
+                    <input type="tel" id="phonenumber" name="phonenumber" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="birthdate">Geboortedatum</label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="used_accessory">Gebruikte hulpmiddel</label>
+                    <input type="text" id="used_accessory" name="used_accessory" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="particularities">Bijzonderheden</label>
+                    <input type="text" id="particularities" name="particularities" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Voogd of toezichthouder</label>
+                    <input type="radio" id="yes" name="guardian" value="1" checked>
+                    <label for="yes">Ja</label>
+                    <input type="radio" id="no" name="guardian" value="0">
+                    <label for="no">Nee</label>
+                  </div>
+                  <div id="guardian_inputs">
+                    <div class="form-group">
+                      <label class="form-label" for="name_guardian">Naam voogd</label>
+                      <input type="text" id="name_guardian" name="name_guardian">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="email_guardian">Voogd email</label>
+                      <input type="email" id="email_guardian" name="email_guardian">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="phonenumber_guardian">Voogd Telefoonnummer</label>
+                      <input type="tel" id="phonenumber_guardian" name="phonenumber_guardian">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="contact_preference">Voorkeur benadering</label>
+                    <select name="contact_preference", id="contact_preference">
+                      <option value="telephone">Telefonisch</option>
+                      <option value="email">Email</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="research_type">Type onderzoek</label>
+                    <select name="research_type" id="research_type">
+                      <option value="telephone">Telefonisch</option>
+                      <option value="internet">Internet</option>
+                      <option value="on_location">Op Locatie</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="particularities_availability">Bijzonderheden beschikbaarheid</label>
+                    <input type="text" id="particularities_availability" name="particularities_availability">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="disability">Beperking</label>
+                    <select name="disability" id="disability">
+                      {% for beperking_type in beperking_dict %}
+                      <optgroup label="{{ beperking_type[0] }}"> {{ beperking_type[0] }}</optgroup>
+                        {% for beperking in beperking_dict[beperking_type] %}
+                        <option value="{{ beperking[1] }}">{{ beperking[0] }}</option>
+                        {% endfor %}
+                      {% endfor%}
+                    </select>
+                  </div>
+                  <input type="submit" value="Submit">
+                </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

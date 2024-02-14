@@ -1,0 +1,13 @@
+.form-box {
+  border: black 1px solid;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+form {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
