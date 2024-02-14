@@ -93,4 +93,15 @@ def select_beperking_from_database_by_type(type):
     return beperkingen
 
 
-
+def beheerder_login(form):
+    connection = get_db()
+    cursor = connection.cursor()
+    name = form.get('usernameInput')
+    wachtwoord = form.get('passwordInput')
+    query = 'SELECT wachtwoord FROM beheerder WHERE gebruikersnaam = ?'
+    cursor.execute(query, (name,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    if(user_data[0] == wachtwoord):
+        return True
+    else: return False

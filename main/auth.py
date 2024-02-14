@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from database_functions import insert_ervaringsdeskundige_into_database, select_type_beperkingen_from_database, select_beperking_from_database_by_type
+from database_functions import insert_ervaringsdeskundige_into_database, select_type_beperkingen_from_database, select_beperking_from_database_by_type, beheerder_login
 
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -11,6 +11,12 @@ def index():
 
 @auth_blueprint.route('/login', methods=['GET', 'POST'])
 def login_page():
+    correct = beheerder_login(request.form)
+    if correct:
+        return redirect(url_for('auth.registration'))
+    else:
+        flash("Login onjuist")
+        return render_template('login_beheerder.html')
 
 
 
