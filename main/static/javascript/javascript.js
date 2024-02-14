@@ -34,6 +34,7 @@ function allow_guardian_inputs(){
   }
 };
 function under_18(){
+  //return true or false if the user is 18 or not
   var date_18 = new Date(get_current_date());
   date_18.setFullYear(date_18.getFullYear()-18); //gets the date before which you need to be born to be 18 or older
   entered_date = new Date($('#birthdate').val()) //the date entered on the form

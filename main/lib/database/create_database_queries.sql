@@ -16,11 +16,12 @@ CREATE TABLE IF NOT EXISTS Beperking (
 );
 CREATE TABLE IF NOT EXISTS Beheerder (
   "id" integer PRIMARY KEY AUTOINCREMENT,
-  "gebuikersnaam" varchar UNIQUE,
+  "gebruikersnaam" varchar UNIQUE,
   "wachtwoord" varchar,
   "voornaam" varchar,
   "achternaam" varchar,
-  "team" varchar
+  "team" varchar,
+  "is_admin" integer
 );
 CREATE TABLE IF NOT EXISTS Onderzoek (
   "id" integer PRIMARY KEY AUTOINCREMENT,
@@ -100,4 +101,6 @@ INSERT INTO Beperking ('beperking', 'type_beperking') VALUES ('Doof','Auditieve 
 ('Reuma', 'Motorische / Lichamelijke Beperkingen'),('Verminderde handvaardigheid', 'Motorische / Lichamelijke Beperkingen'),('Spierdystrofie', 'Motorische / Lichamelijke Beperkingen'),
 ('RSI', 'Motorische / Lichamelijke Beperkingen'),('Tremor en Spasmen', 'Motorische / Lichamelijke Beperkingen'),('Quadriplegie of tetraplegie', 'Motorische / Lichamelijke Beperkingen'),
 ('ADHD','Cognitieve / Neurologische Beperkingen'),('Autisme','Cognitieve / Neurologische Beperkingen'),('Leerstoornis','Cognitieve / Neurologische Beperkingen'),
-('Geheugen beperking','Cognitieve / Neurologische Beperkingen'),('Epilepsie','Cognitieve / Neurologische Beperkingen'),('Migraine','Cognitieve / Neurologische Beperkingen')
+('Geheugen beperking','Cognitieve / Neurologische Beperkingen'),('Epilepsie','Cognitieve / Neurologische Beperkingen'),('Migraine','Cognitieve / Neurologische Beperkingen');
+
+INSERT INTO Beheerder ('gebruikersnaam','wachtwoord','voornaam','achternaam','team','is_admin') VALUES ('admin','admin','admin','admin','admin','1');
