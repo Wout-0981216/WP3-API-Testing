@@ -30,4 +30,4 @@ def registration():
 def add_registration():
     msg = insert_ervaringsdeskundige_into_database(request.form)
     flash(msg)
-    return render_template('register.html')
+    return redirect(url_for("auth.registration"))
