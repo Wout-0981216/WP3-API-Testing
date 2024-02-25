@@ -12,3 +12,18 @@ def ervaringsdeskundige_onderzoek_overzicht():
    
     return render_template('onderzoek_overzicht.html')
 
+@ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/haal_beschikbar_onderzoek', methods=['GET', 'POST'])
+def haal_beschikbar_onderzoek():
+    #TO DO (Die de dadtabase heeft gemaakt) Maak een functie die het beschikbare "gebaseerde criteria" onderzoek retourneert
+
+    with open("C:/Users/Alaa Alkatlabe/PycharmProjects/wp3-2024-rest-1e4-kingcode/dom.json", "r") as file: 
+        data = json.load(file)
+    return jsonify(data)
+    # return render_template('onderzoek_overzicht.html')
+    
+    
+@ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/deelnaam_onderzoek', methods=['PUT', 'POST'])
+def deelnaam_onderzoek():
+   # TO DO Creëer een functie die een individu registreert voor een onderzoek
+  
+    return jsonify(request.json)

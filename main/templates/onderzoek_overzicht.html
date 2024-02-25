@@ -2,6 +2,105 @@
 <link href="/static/css/register.css" rel="stylesheet" />
 <script src="/static/javascript/javascript.js"></script>
 
+<style>
+    .reserarch-list-container ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; 
+        align-items: center;
+        padding: 0;
+    }
+    
+    .reserarch-list-container ul li {
+        width: 400px;
+        height: 200px;
+        background-color: #f2f2f2;
+        padding: 10px;
+        margin: 20px;
+        display: flex;
+        flex-direction: column; 
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 30px;
+
+    }
+    
+    
+</style>
+<script>
+  var lastResponse;
+  function deelname(event) {
+    if (event && event.target) {
+      const id = event.target.id.replace("onderzoek-id-", "");
+      console.log(id);
+      const clickedResearch = lastResponse.filter((element) => {
+        if (element.id == id) {
+          return true;
+        }
+        return false;
+      });
+      console.log({ clickedResearch });
+      $.ajax({
+        url: "http://127.0.0.1:5000/ervaringsdeskundige/deelnaam_onderzoek",
+        method: "POST",
+        // jsonp: true,
+        contentType: "application/json",
+        data: JSON.stringify(clickedResearch[0]),
+      })
+        .done((response) => {
+          console.log(response);
+        })
+        .fail((error) => {
+          alert("Something went wrong, please try again later");
+          console.error(error);
+        });
+    }
+  }
+  $(document).ready(() => {
+
+
+    setInterval(() => {
+        $.ajax({
+            url: "http://127.0.0.1:5000/ervaringsdeskundige/haal_beschikbar_onderzoek",
+            method: "GET",
+        }).then(jsonResponse => {
+            if (jsonResponse.length > 0) {
+                if (JSON.stringify(jsonResponse) !== JSON.stringify(lastResponse)) {
+                    console.log("response");
+                    lastResponse = jsonResponse;
+                    console.log({ lastResponse })
+                    let listItems = '';
+                    jsonResponse.forEach((element) => {
+                        listItems += `<li class='list-element'>
+                        <span>${element.title} </span>
+                        <button  onclick='deelname(event)'
+
+                        id=onderzoek-id-${element.id}
+                        type="button" class="btn btn-primary">Deelname</button>
+                        </li>`
+
+                    })
+                    $("#list").html(listItems);
+                    // jsonResponse.forEach(element => {
+                    //     $(`#onderzoek-id-${element.id}`).on('click', (event) => {
+                    //         console.log(event)
+                    //     });
+                    // })
+
+
+                }
+            } else {
+                $("#list").html(`<li>No Research found </li>`)
+            }
+        }).catch(error => {
+
+        })
+
+    }, 1000);
+
+});
+</script>
+
 {% endblock %}
 
 {% block content %}
