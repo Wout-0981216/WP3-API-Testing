@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from database_functions import insert_ervaringsdeskundige_into_database, select_type_beperkingen_from_database, select_beperking_from_database_by_type, beheerder_login
+from database_functions import (insert_ervaringsdeskundige_into_database, select_type_beperkingen_from_database,
+                                select_beperking_from_database_by_type, beheerder_login, get_db)
 
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -48,10 +49,47 @@ def add_registration():
 
 @auth_blueprint.route("/login-beheerder", methods=['GET', 'POST'])
 def login_beheerder():
-    return render_template('login_beheerder.html')
+        if request.method == 'POST':
+            connection = get_db()
+            cursor = connection.cursor()
+            name = request.form['gebruikersnaamBh']
+            password = request.form['wachtwoordBh']
+            query = "SELECT * FROM beheerder WHERE gebruikersnaam = ?"
+            cursor.execute(query, (name,))
+            user_data = cursor.fetchone()
+
+            if user_data is None or user_data['wachtwoord'] != password:
+                flash('Foutieve gebruikersnaam/wachtwoord')
+                return render_template('login_beheerder.html')
+            else:
+                is_admin = user_data['is_admin']
+                session['role'] = is_admin
+                session['beheerder_id'] = user_data['id']
+                session['display_name'] = user_data['voornaam']
+                return redirect(url_for('auth.login_evd', is_admin=is_admin))
+
+        return render_template('login_beheerder.html')
 
 
 @auth_blueprint.route("/login-ervaringsdeskundige", methods=['GET', 'POST'])
 def login_evd():
+    if request.method == 'POST':
+        connection = get_db()
+        cursor = connection.cursor()
+        name = request.form['gebruikersnaamEvd']
+        password = request.form['wachtwoordEvd']
+        query = "SELECT * FROM ervaringsdeskundige WHERE gebruikersnaam = ?"
+        cursor.execute(query, (name,))
+        user_data = cursor.fetchone()
+
+        if user_data is None or user_data['wachtwoord'] != password:
+            flash('Foutieve gebruikersnaam/wachtwoord')
+            return render_template('login_evd.html')
+        else:
+            session['beheerder_id'] = user_data['id']
+            session['display_name'] = user_data['voornaam']
+            return redirect(url_for('auth.login_beheerder'))
+
     return render_template('login_evd.html')
-    
+
+
