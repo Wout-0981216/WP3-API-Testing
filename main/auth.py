@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
 from database_functions import (insert_ervaringsdeskundige_into_database, select_type_beperkingen_from_database,
-                                select_beperking_from_database_by_type, beheerder_login, get_db)
+                                select_beperking_from_database_by_type, beheerder_login, get_db, get_evd_from_database_with_status_nieuw,
+                                update_evd_status)
 
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -18,8 +19,6 @@ def login_page():
     else:
         flash("Login onjuist")
         return render_template('login_beheerder.html')
-
-
 
 
 @auth_blueprint.route("/logout")
@@ -44,7 +43,7 @@ def registration():
 def add_registration():
     msg = insert_ervaringsdeskundige_into_database(request.form)
     flash(msg)
-    return render_template('register.html')
+    return redirect(url_for("auth.registration"))
 
 
 @auth_blueprint.route("/login-beheerder", methods=['GET', 'POST'])
@@ -92,4 +91,13 @@ def login_evd():
 
     return render_template('login_evd.html')
 
+@auth_blueprint.route("/nieuwe_ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
+def goed_te_keuren_evd():
+    evd_to_be_confirmed = get_evd_from_database_with_status_nieuw()
+    return render_template('nieuwe_ervaringsdeskundige_overzicht.html', ervaringsdeskundige=evd_to_be_confirmed)
 
+@auth_blueprint.route("/ervaringsdeskundige_goedkeuren/<evd_id>", methods=['GET', 'POST'])
+def evd_goedkeuren(evd_id):
+    update_evd_status(evd_id)
+    print('??')
+    return redirect(url_for('auth.goed_te_keuren_evd'))

@@ -36,7 +36,7 @@ def insert_ervaringsdeskundige_into_database(form):
     voorkeur_benadering = form.get('contact_preference')
     type_onderzoek = form.get('research_type')
     bijzonderheden_beschikbaarheid = form.get('particularities_availability')
-    status = "nieuw"
+    status = 'nieuw'
     beheerder_id = None
     datum_status_update = None
     beperking = form.get('disability')
@@ -105,3 +105,20 @@ def beheerder_login(form):
     if(user_data[0] == wachtwoord):
         return True
     else: return False
+
+def get_evd_from_database_with_status_nieuw():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT * FROM Ervaringsdeskundige WHERE status = 'nieuw'"
+    cursor.execute(query)
+    user_data = cursor.fetchall()
+    cursor.close()
+    return user_data
+
+def update_evd_status(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "UPDATE Ervaringsdeskundige SET status = 'goedgekeurd' WHERE id = ?"
+    cursor.execute(query, (id,))
+    cursor.close()
+    return
