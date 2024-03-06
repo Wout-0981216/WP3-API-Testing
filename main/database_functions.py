@@ -116,6 +116,15 @@ def get_all_evd_from_database():
     cursor.close()
     return user_data
 
+def get_evd_from_database_by_status_nieuw():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT * FROM Ervaringsdeskundige WHERE status = 'nieuw'"
+    cursor.execute(query)
+    user_data = cursor.fetchall()
+    cursor.close()
+    return user_data
+
 def get_evd_from_database_by_id(id):
     connection = get_db()
     cursor = connection.cursor()
