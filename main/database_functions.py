@@ -118,7 +118,7 @@ def get_aanvragen():
 def get_onderzoeken():
     connection = get_db()
     cursor = connection.cursor()
-    query = "SELECT COUNT(*) FROM Onderzoek;"
+    query = "SELECT COUNT(*) FROM Onderzoek WHERE status='nieuw';"
     cursor.execute(query)
     count_onderzoeken = cursor.fetchone()[0]
     cursor.close()
