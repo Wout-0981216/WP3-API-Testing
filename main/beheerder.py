@@ -43,3 +43,7 @@ def deny_evd(evd_id):
 def view_evd(evd_id):
     evd_info = get_evd_from_database_by_id(evd_id)
     return render_template('view_ervaringsdeskundige.html', evd_info = evd_info)
+
+@beheerder_blueprint.route("/ervaringsdeskundige_inschrijving", methods=['GET', 'POST'])
+def view_evd_inschrijving():
+    return render_template('inschrijvingen.html')
