@@ -1,0 +1,16 @@
+body {
+	padding: 2rem;
+}
+
+.card {
+	margin-bottom: 2rem;
+}
+
+.card-body {
+	padding: 1rem;
+}
+
+.card-title {
+	font-size: 1.5rem;
+	font-weight: bold;
+}

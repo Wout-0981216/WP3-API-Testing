@@ -63,7 +63,7 @@ def login_beheerder():
                 session['role'] = is_admin
                 session['beheerder_id'] = user_data['id']
                 session['display_name'] = user_data['voornaam']
-                return redirect(url_for('auth.login_evd', is_admin=is_admin))
+                return redirect(url_for('beheerder.beheerder', is_admin=is_admin))
 
         return render_template('login_beheerder.html')
 

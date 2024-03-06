@@ -28,6 +28,9 @@
                                 <label for="passwordInput">Wachtwoord</label>
                                 <input type="password" class="form-control" id="passwordInput" name="wachtwoordEvd" placeholder="Wachtwoord">
                             </div>
+                            {% for message in get_flashed_messages() %}
+                                <div class="alert alert-danger" role="alert">{{ message }}</div>
+                            {% endfor %}    
                             <button type="submit" name="submit" class="btn btn-primary">Login</button>
                         </form>
                     </div>

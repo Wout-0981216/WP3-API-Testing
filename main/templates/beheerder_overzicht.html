@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Dashboard</title>
+	<link rel="stylesheet" href="static/css/beheerder.css">
+</head>
+<body>
+<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Welkom op het dashboard voor beheerders, {{ session['display_name'] }}</h2>
+				</div>
+			</div>
+</div>
+	<div class="container">
+        <br>
+		<div class="row">
+			<div class="col-md-4">
+				<a href="{{ url_for('beheerder.evd_overzicht') }}">
+					<div class="card text-white bg-primary mb-3 clickable-card" style="max-width: 55rem;">
+						<div class="card-header">Registraties</div>
+						<div class="card-body">
+							<h5 class="card-title">Aantal goed te keuren registraties <span id="investigationCount1">0</span></h5>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4">
+				<a href="{{ url_for('beheerder.beheerder') }}">
+					<div class="card text-white bg-primary mb-3 clickable-card" style="max-width: 55rem;">
+						<div class="card-header">Onderzoeken</div>
+						<div class="card-body">
+							<h5 class="card-title">Aantal goed te keuren onderzoeken <span id="investigationCount2">0</span></h5>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-md-4">
+				<a href="{{ url_for('beheerder.beheerder') }}">
+					<div class="card text-white bg-primary mb-3 clickable-card" style="max-width: 55rem;">
+						<div class="card-header">Inschrijvingen voor onderzoeken</div>
+						<div class="card-body">
+							<h5 class="card-title">Aantal goed te keuren aanvragen <span id="investigationCount3">0</span></h5>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="static/javascript/beheerder.js"></script>
+</body>
+</html>
+
+{% endblock %}

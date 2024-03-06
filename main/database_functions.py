@@ -160,3 +160,32 @@ def deny_evd_status(id):
     finally:
         cursor.close()
         return msg
+
+def get_aanvragen():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT COUNT(*) FROM Ervaringsdeskundige WHERE status='nieuw';"
+    cursor.execute(query)
+    count_aanvragen = cursor.fetchone()[0]
+    cursor.close()
+    return count_aanvragen
+
+def get_onderzoeken():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT COUNT(*) FROM Onderzoek WHERE status='nieuw';"
+    cursor.execute(query)
+    count_onderzoeken = cursor.fetchone()[0]
+    cursor.close()
+    return count_onderzoeken
+
+def get_evd():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT count(*) FROM Inschrijving_ervaringsdeskundige_onderzoek  WHERE status='nieuw';"
+    cursor.execute(query)
+    count_evd = cursor.fetchone()[0]
+    cursor.close()
+    return count_evd
+
+
