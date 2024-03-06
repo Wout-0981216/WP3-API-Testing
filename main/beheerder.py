@@ -48,10 +48,6 @@ def view_evd(evd_id):
 def view_evd_inschrijving():
     return render_template('inschrijvingen.html')
 
-@beheerder_blueprint.route("/ervaringsdeskundige_inschrijving", methods=['GET', 'POST'])
-def view_evd_inschrijving():
-    return render_template('inschrijvingen.html')
-
 @beheerder_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
 def evd_overzicht():
     all_evd = get_all_evd_from_database()
