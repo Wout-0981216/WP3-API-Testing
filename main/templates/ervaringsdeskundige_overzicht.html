@@ -30,20 +30,20 @@
         <td>{{evd['geboortedatum']}}</td>
         <td>{{evd['status']}}</td>
         <td>
-          <form method="post" action="{{ url_for('auth.view_evd', evd_id = evd['id']) }}">
+          <form method="post" action="{{ url_for('beheerder.view_evd', evd_id = evd['id']) }}">
           <input type="submit" value="view">
           </form>
         </td>
         {% if evd['status'] == 'nieuw' or evd['status'] == 'afgekeurd'%}
         <td>
-          <form method="post" action="{{ url_for('auth.confirm_evd', evd_id = evd['id']) }}">
+          <form method="post" action="{{ url_for('beheerder.confirm_evd', evd_id = evd['id']) }}">
           <input type="submit" value="goedkeuren">
           </form>
         </td>
         {% endif %}
         {% if evd['status'] == 'nieuw' or evd['status'] == 'goedgekeurd'%}
         <td>
-          <form method="post" action="{{ url_for('auth.deny_evd', evd_id = evd['id']) }}">
+          <form method="post" action="{{ url_for('beheerder.deny_evd', evd_id = evd['id']) }}">
           <input type="submit" value="afkeuren">
           </form>
         </td>
