@@ -112,16 +112,16 @@ def get_aanvragen():
     query = "SELECT COUNT(*) FROM Ervaringsdeskundige WHERE status='nieuw';"
     cursor.execute(query)
     count_aanvragen = cursor.fetchone()[0]
-    connection.close()
+    cursor.close()
     return count_aanvragen
 
 def get_onderzoeken():
     connection = get_db()
     cursor = connection.cursor()
-    query = "SELECT COUNT(*) FROM Onderzoek WHERE status='nieuw';"
+    query = "SELECT COUNT(*) FROM Onderzoek;"
     cursor.execute(query)
     count_onderzoeken = cursor.fetchone()[0]
-    connection.close()
+    cursor.close()
     return count_onderzoeken
 
 def get_evd():
@@ -130,7 +130,7 @@ def get_evd():
     query = "SELECT count(*) FROM Inschrijving_ervaringsdeskundige_onderzoek  WHERE status='nieuw';"
     cursor.execute(query)
     count_evd = cursor.fetchone()[0]
-    connection.close()
+    cursor.close()
     return count_evd
 
 

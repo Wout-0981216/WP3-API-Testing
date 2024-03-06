@@ -14,12 +14,12 @@ def get_aanvragen_route():
     aanvragen = get_aanvragen()
     return jsonify({'aanvragen': aanvragen})
 
-@beheerder_blueprint.route('/get_onderzoeken', methods=['POST'])
+@beheerder_blueprint.route('/get_onderzoeken', methods=['GET'])
 def get_onderzoeken_route():
     onderzoeken = get_onderzoeken()
     return jsonify({'onderzoeken': onderzoeken})
 
-@beheerder_blueprint.route('/get_evd', methods=['POST'])
+@beheerder_blueprint.route('/get_evd', methods=['GET'])
 def get_evder_route():
     evd = get_evd()
     return jsonify({'evd': evd})

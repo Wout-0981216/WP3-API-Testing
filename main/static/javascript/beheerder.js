@@ -1,5 +1,33 @@
 
-function updateOpenRequestsCount() {
+function updateInschrijvingen() {
+            $.ajax({
+                url: '/get_evd',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#investigationCount3').text(data.evd);
+                },
+                error: function (error) {
+                    console.log('Fout bij het ophalen van openstaande aanvragen:', error);
+                }
+            });
+        }
+
+function updateOnderzoeken() {
+            $.ajax({
+                url: '/get_onderzoeken',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#investigationCount2').text(data.onderzoeken);
+                },
+                error: function (error) {
+                    console.log('Fout bij het ophalen van openstaande aanvragen:', error);
+                }
+            });
+        }
+
+function updateRegistraties() {
             $.ajax({
                 url: '/get_aanvragen',
                 type: 'GET',
@@ -14,9 +42,14 @@ function updateOpenRequestsCount() {
         }
 
         $(document).ready(function () {
-            updateOpenRequestsCount();
+            updateRegistraties();
+            updateOnderzoeken();
+            updateInschrijvingen();
+
         });
 
         setInterval(function () {
-            updateOpenRequestsCount();
+            updateRegistraties();
+            updateOnderzoeken();
+            updateInschrijvingen();
         }, 10000);
