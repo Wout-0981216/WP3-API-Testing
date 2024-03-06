@@ -105,3 +105,13 @@ def beheerder_login(form):
     if(user_data[0] == wachtwoord):
         return True
     else: return False
+
+def get_aanvragen():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT COUNT(*) FROM Ervaringsdeskundige;"
+    cursor.execute(query)
+    count_aanvragen = cursor.fetchone()[0]
+    connection.close()
+    return count_aanvragen
+

@@ -1,9 +1,22 @@
-fetch('https://api.example.com/investigations')
-	.then(response => response.json())
-	.then(data => {
-		// Update the HTML with the number of ongoing investigations
-		document.getElementById('investigationCount1').innerHTML = data[0].count;
-		document.getElementById('investigationCount2').innerHTML = data[1].count;
-		document.getElementById('investigationCount3').innerHTML = data[2].count;
-	})	
-	.catch(error => console.error('Error:', error));
+
+function updateOpenRequestsCount() {
+            $.ajax({
+                url: '/get_aanvragen',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    $('#investigationCount1').text(data.aanvragen);
+                },
+                error: function (error) {
+                    console.log('Fout bij het ophalen van openstaande aanvragen:', error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            updateOpenRequestsCount();
+        });
+
+        setInterval(function () {
+            updateOpenRequestsCount();
+        }, 10000);
