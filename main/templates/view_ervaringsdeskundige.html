@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block head %}
+<link href="/static/css/register.css" rel="stylesheet">
+<script src="/static/javascript/javascript.js"></script>
+{% endblock %}
+{% block content %}
+
+<h1 class="row justify-content-center">Ervaringsdeskundige bekijken</h1>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="row note-box">
+        <span class="fw-bold">Voornaam: {{ evd_info['voornaam'] }}</span>
+        <span class="fw-bold">Achternaam: {{ evd_info['achternaam'] }}</span>
+        <span class="fw-bold">Postcode: {{ evd_info['postcode'] }}</span>
+        <span class="fw-bold">Geslacht: {{ evd_info['geslacht'] }}</span>
+        <span class="fw-bold">Email: {{ evd_info['email'] }}</span>
+        <span class="fw-bold">Gebruikersnaam: {{ evd_info['gebruikersnaam'] }}</span>
+        <span class="fw-bold">Telefoonnummer: {{ evd_info['telefoonnummer'] }}</span>
+        <span class="fw-bold">Geboortedatum: {{ evd_info['geboortedatum'] }}</span>
+        <span class="fw-bold">Gebruikte_hulpmiddel: {{ evd_info['gebruikte_hulpmiddel'] }}</span>
+        <span class="fw-bold">Bijzonderheden: {{ evd_info['bijzonderheden'] }}</span>
+        {%if evd_info['toezichthouder'] == 1%}
+          <span class="fw-bold">Toezichthouder: Ja</span>
+          <span class="fw-bold">Naam voogd: {{ evd_info['naam_voogd_of_toezichthouder'] }}</span>
+          <span class="fw-bold">Email voogd: {{ evd_info['email_adres_voogd'] }}</span>
+          <span class="fw-bold">Telefoonnummer voogd: {{ evd_info['telefoonnummer_voogd'] }}</span>
+        {% else %}
+        <span class="fw-bold">Toezichthouder: Nee</span>
+        {% endif %}
+        <span class="fw-bold">Voorkeur benadering: {{ evd_info['voorkeur_benadering'] }}</span>
+        <span class="fw-bold">Type onderzoek: {{ evd_info['type_onderzoek'] }}</span>
+        <span class="fw-bold">Bijzonderheden beschikbaarheid: {{ evd_info['bijzonderheden_beschikbaarheid'] }}</span>
+        <span class="fw-bold">Status: {{ evd_info['status'] }}</span>
+        <span class="fw-bold">Status voor het laatst geüpdate door: {{ evd_info['beheerder_id'] }}</span>
+        <span class="fw-bold">Datum laatste status update: {{ evd_info['datum_status_update'] }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

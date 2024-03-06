@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from database_functions import (insert_ervaringsdeskundige_into_database, select_type_beperkingen_from_database,
-                                select_beperking_from_database_by_type, beheerder_login, get_db, get_evd_from_database_with_status_nieuw,
-                                update_evd_status)
+from database_functions import *
 
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -91,13 +89,22 @@ def login_evd():
 
     return render_template('login_evd.html')
 
-@auth_blueprint.route("/nieuwe_ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
-def goed_te_keuren_evd():
-    evd_to_be_confirmed = get_evd_from_database_with_status_nieuw()
-    return render_template('nieuwe_ervaringsdeskundige_overzicht.html', ervaringsdeskundige=evd_to_be_confirmed)
+@auth_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
+def evd_overzicht():
+    all_evd = get_all_evd_from_database()
+    return render_template('ervaringsdeskundige_overzicht.html', all_evd=all_evd)
 
 @auth_blueprint.route("/ervaringsdeskundige_goedkeuren/<evd_id>", methods=['GET', 'POST'])
-def evd_goedkeuren(evd_id):
-    update_evd_status(evd_id)
-    print('??')
-    return redirect(url_for('auth.goed_te_keuren_evd'))
+def confirm_evd(evd_id):
+    confirm_evd_status(evd_id)
+    return redirect(url_for('auth.evd_overzicht'))
+
+@auth_blueprint.route("/ervaringsdeskundige_afkeuren/<evd_id>", methods=['GET', 'POST'])
+def deny_evd(evd_id):
+    deny_evd_status(evd_id)
+    return redirect(url_for('auth.evd_overzicht'))
+
+@auth_blueprint.route("/ervaringsdeskundige_view/<evd_id>", methods=['GET', 'POST'])
+def view_evd(evd_id):
+    evd_info = get_evd_from_database_by_id(evd_id)
+    return render_template('view_ervaringsdeskundige.html', evd_info = evd_info)

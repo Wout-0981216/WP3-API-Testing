@@ -1,6 +1,7 @@
 from flask import g
 import sqlite3
 import os
+import datetime
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
 database_path = os.path.join(current_directory, 'lib\database', 'database.db')
@@ -106,19 +107,56 @@ def beheerder_login(form):
         return True
     else: return False
 
-def get_evd_from_database_with_status_nieuw():
+def get_all_evd_from_database():
     connection = get_db()
     cursor = connection.cursor()
-    query = "SELECT * FROM Ervaringsdeskundige WHERE status = 'nieuw'"
+    query = "SELECT * FROM Ervaringsdeskundige"
     cursor.execute(query)
     user_data = cursor.fetchall()
     cursor.close()
     return user_data
 
-def update_evd_status(id):
+def get_evd_from_database_by_id(id):
     connection = get_db()
     cursor = connection.cursor()
-    query = "UPDATE Ervaringsdeskundige SET status = 'goedgekeurd' WHERE id = ?"
+    query = "SELECT * FROM Ervaringsdeskundige WHERE id = ?"
     cursor.execute(query, (id,))
+    user_data = cursor.fetchone()
     cursor.close()
-    return
+    return user_data
+
+def confirm_evd_status(id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1 #moet nog aangepast worden naar ID van de ingelogde beheerder
+        query = "UPDATE Ervaringsdeskundige SET status = 'goedgekeurd', beheerder_id = ?, datum_status_update = ? WHERE id = ?"
+        cursor.execute(query, (beheerder_id,current_datetime,id,))
+        connection.commit()
+        msg = "status updated"
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in the INSERT: {e}"
+    finally:
+        cursor.close()
+        return msg
+
+def deny_evd_status(id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1 #moet nog aangepast worden naar ID van de ingelogde beheerder
+        query = "UPDATE Ervaringsdeskundige SET status = 'afgekeurd', beheerder_id = ?, datum_status_update = ? WHERE id = ?"
+        cursor.execute(query, (beheerder_id,current_datetime,id,))
+        connection.commit()
+        msg = "status updated"
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in the INSERT: {e}"
+    finally:
+        cursor.close()
+        return msg
