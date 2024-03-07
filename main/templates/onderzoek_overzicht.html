@@ -1,0 +1,187 @@
+{% extends 'base.html' %} {% block head %}
+<link href="/static/css/register.css" rel="stylesheet" />
+<script src="/static/javascript/javascript.js"></script>
+
+<style>
+  .list-element {
+    width: 100%;
+    max-width: 600px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    list-style:none;
+}
+
+.list-element span {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.list-element p {
+    margin-top: 10px;
+}
+
+.list-element button {
+    margin-top: 10px;
+}
+</style>
+<script>
+  var lastResponse = {
+      beschikbaar: null,
+      geregisteered: null,
+  };
+  var interval;
+  const getResearches = (type = 'beschikbaar') => {
+    $.ajax({
+        url: `http://127.0.0.1:5000/ervaringsdeskundige/haal_${type}_onderzoek`,
+        method: "GET",
+    })
+      .then((jsonResponse) => {
+        if (jsonResponse.length > 0) {
+          console.log(JSON.stringify(jsonResponse) !== JSON.stringify(lastResponse[type]))
+          if (JSON.stringify(jsonResponse) !== JSON.stringify(lastResponse[type])) {
+            console.log("response");
+            lastResponse[type] = jsonResponse;
+            console.log({ lastResponse });
+            let listItems = '';
+            lastResponse[type].forEach((element) => {
+              let typeButton = type == 'beschikbaar' ? `<button  onclick='deelname(event)'
+                            id=onderzoek-id-${element.id}
+                            type="button" class="btn btn-primary">Inschrijven</button>
+                           ` : `<button  onclick='uitschrijven(event)'
+                            id=onderzoek-id-${element.id}
+                            type="button" class="btn btn-danger">Uitschriven</button>
+                           `
+
+                        listItems += `<li class='list-element'>
+                            <span>${element.title} </span>
+                            <div>
+                                <p>${element.beschrijving}</p>
+                            </div>
+                            ${typeButton}
+                            </li>`
+            });
+            $(type == 'beschikbaar' ? '#list-beschikbaar' : '#list-geregisteered').html(listItems);
+          }
+        } else {
+          $("#list").html(`<li>No Research found </li>`);
+        }
+      })
+      .catch((error) => {});
+  };
+
+  function uitschrijven() {
+    const resultConfirm = confirm("Bent u zeker! ");
+    console.log({ resultConfirm });
+    if (event && event.target) {
+      const id = event.target.id.replace('onderzoek-id-', '');
+      console.log(id);
+      const clickedResearch = lastResponse.filter((element) => {
+        if (element.id == id) {
+          return true;
+        }
+        return false;
+      });
+      console.log({ clickedResearch });
+      $.ajax({
+        url: "http://127.0.0.1:5000/ervaringsdeskundige/deelnaam_onderzoek",
+        method: "POST",
+        // jsonp: true,
+        contentType: "application/json",
+        data: JSON.stringify(clickedResearch[0]),
+      })
+        .done((response) => {
+          console.log(response);
+        })
+        .fail((error) => {
+          alert("Er is iets misgegaan! Probeer het later opnieuw");
+          console.error(error);
+        });
+    }
+  }
+
+  function deelname(event) {
+    if (event && event.target) {
+      const id = event.target.id.replace("onderzoek-id-", "");
+      console.log(id);
+      const clickedResearch = lastResponse.filter((element) => {
+        if (element.id == id) {
+          return true;
+        }
+        return false;
+      });
+      console.log({ clickedResearch });
+      $.ajax({
+        url: "http://127.0.0.1:5000/ervaringsdeskundige/deelnaam_onderzoek",
+        method: "POST",
+        // jsonp: true,
+        contentType: "application/json",
+        data: JSON.stringify(clickedResearch[0]),
+      })
+        .done((response) => {
+          console.log(response);
+        })
+        .fail((error) => {
+          alert("Er is iets misgegaan! Probeer het later opnieuw");
+          console.error(error);
+        });
+    }
+  }
+  $(document).ready(() => {
+    $("#beschikbaar-href").on("click", () => {
+      console.log("beschikbaar clicked");
+      $("#geregisteered").css({ display: "none" });
+      $("#beschikbaar").css({ display: "block" });
+      clearInterval(interval);
+      interval = setInterval(() => {
+        getResearches();
+      }, 1000);
+    });
+    $("#geregisteered-href").on("click", () => {
+      console.log("geregisteered clicked");
+      $("#geregisteered").css({ display: "block" });
+      $("#beschikbaar").css({ display: "none" });
+      clearInterval(interval);
+      interval = setInterval(() => {
+        getResearches("geregisteered");
+      }, 1000);
+    });
+
+    $("#beschikbaar-href").click();
+  });
+</script>
+
+{% endblock %} {% block content %}
+
+
+<div class="container-flex">
+  <div class="reserarch-list-container">
+      <h1> Onderzoeken </h1>
+  </a>
+
+  <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+          <a href="#beschikbaar" id="beschikbaar-href" role="tab" data-toggle="tab" class="nav-link">
+              Beschikbaar </a>
+      </li>
+      <li class="nav-item">
+          <a href="#geregisteered" id="geregisteered-href" role="tab" data-toggle="tab" class="nav-link">
+              Geregisteered </a>
+      </li>
+  </ul>
+  <div class="tab-content">
+      <div class="tab-pane active" role="tabpanel" id="beschikbaar">
+          <h3> Beschikbaar </h3>
+          <ul id="list-beschikbaar">
+          </ul>
+      </div>
+      <div class="tab-pane" role="tabpanel" id="geregisteered">
+          <h3> Geregisteered </h3>
+          <ul id="list-geregisteered">
+          </ul>
+      </div>
+  </div>
+</div>
+</div>
+{% endblock %}
