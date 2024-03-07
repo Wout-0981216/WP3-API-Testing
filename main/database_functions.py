@@ -1,6 +1,7 @@
 from flask import g
 import sqlite3
 import os
+import datetime
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
 database_path = os.path.join(current_directory, 'lib\database', 'database.db')
@@ -36,7 +37,7 @@ def insert_ervaringsdeskundige_into_database(form):
     voorkeur_benadering = form.get('contact_preference')
     type_onderzoek = form.get('research_type')
     bijzonderheden_beschikbaarheid = form.get('particularities_availability')
-    status = "nieuw"
+    status = 'nieuw'
     beheerder_id = None
     datum_status_update = None
     beperking = form.get('disability')
@@ -91,3 +92,109 @@ def select_beperking_from_database_by_type(type):
     beperkingen = cursor.fetchall()
     cursor.close()
     return beperkingen
+
+
+def beheerder_login(form):
+    connection = get_db()
+    cursor = connection.cursor()
+    name = form.get('usernameInput')
+    wachtwoord = form.get('passwordInput')
+    query = 'SELECT wachtwoord FROM beheerder WHERE gebruikersnaam = ?'
+    cursor.execute(query, (name,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    if(user_data[0] == wachtwoord):
+        return True
+    else: return False
+
+def get_all_evd_from_database():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT * FROM Ervaringsdeskundige"
+    cursor.execute(query)
+    user_data = cursor.fetchall()
+    cursor.close()
+    return user_data
+
+def get_evd_from_database_by_status_nieuw():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT * FROM Ervaringsdeskundige WHERE status = 'nieuw'"
+    cursor.execute(query)
+    user_data = cursor.fetchall()
+    cursor.close()
+    return user_data
+
+def get_evd_from_database_by_id(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT * FROM Ervaringsdeskundige WHERE id = ?"
+    cursor.execute(query, (id,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    return user_data
+
+def confirm_evd_status(id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1 #moet nog aangepast worden naar ID van de ingelogde beheerder
+        query = "UPDATE Ervaringsdeskundige SET status = 'goedgekeurd', beheerder_id = ?, datum_status_update = ? WHERE id = ?"
+        cursor.execute(query, (beheerder_id,current_datetime,id,))
+        connection.commit()
+        msg = "status updated"
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in the INSERT: {e}"
+    finally:
+        cursor.close()
+        return msg
+
+def deny_evd_status(id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1 #moet nog aangepast worden naar ID van de ingelogde beheerder
+        query = "UPDATE Ervaringsdeskundige SET status = 'afgekeurd', beheerder_id = ?, datum_status_update = ? WHERE id = ?"
+        cursor.execute(query, (beheerder_id,current_datetime,id,))
+        connection.commit()
+        msg = "status updated"
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in the INSERT: {e}"
+    finally:
+        cursor.close()
+        return msg
+
+def get_aanvragen():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT COUNT(*) FROM Ervaringsdeskundige WHERE status='nieuw';"
+    cursor.execute(query)
+    count_aanvragen = cursor.fetchone()[0]
+    cursor.close()
+    return count_aanvragen
+
+def get_onderzoeken():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT COUNT(*) FROM Onderzoek WHERE status='nieuw';"
+    cursor.execute(query)
+    count_onderzoeken = cursor.fetchone()[0]
+    cursor.close()
+    return count_onderzoeken
+
+def get_evd():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT count(*) FROM Inschrijving_ervaringsdeskundige_onderzoek  WHERE status='nieuw';"
+    cursor.execute(query)
+    count_evd = cursor.fetchone()[0]
+    cursor.close()
+    return count_evd
+
+

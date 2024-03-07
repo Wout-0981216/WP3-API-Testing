@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1 class="row justify-content-center">Login Beheerders</h1>
-<div class="container mt-5">
-  <div class="row justify-content-center">
-      <div class="col-md-6">
-          <div class="card">
-              <div class="card-body">
-                <form method="POST">
-                  <div class="form-group">
-                      <label for="username">Gebruikersnaam</label>
-                      <input type="text" name="name" class="form-control" placeholder="Gebruikersnaam" required>
-                  </div>
-                  <div class="form-group">
-                      <label for="password">Wachtwoord</label>
-                      <input type="password" name="password" class="form-control" placeholder="Wachtwoord" required>
-                  </div>
-                    <br>
-                  <div class="messagesbox">
-                    {% for message in get_flashed_messages() %}
-                      <div class="alert alert-danger" role="alert">{{ message }}</div>
-                    {% endfor %}
-                  </div>
-                  <input class="btn btn-primary" type="submit" name="submit" value="Inloggen">
-                </form>
-              </div>
-          </div>
-      </div>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <h1 class="mb-4">Welkom bij Accesibility hub</h1>
+                <div class="btn-group" role="group" aria-label="Login buttons">
+                <a href="{{ url_for('auth.login_beheerder') }}" class="btn btn-primary mx-2">Login voor beheerders</a>
+                <a href="{{ url_for('auth.login_evd') }}" class="btn btn-secondary mx-2">Login voor ervaringsdeskundigen</a>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6 text-center">
+                <p>Ervaringsdeskundige worden? <a href={{ url_for('auth.registration') }} id="register-link">Meld je aan als ervaringsdeskundige</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
 
 {% endblock %}
