@@ -32,6 +32,7 @@
       geregisteered: null,
   };
   var interval;
+  var INTERVAL_TIME = 5000;
   const getResearches = (type = 'beschikbaar') => {
     $.ajax({
         url: `http://127.0.0.1:5000/ervaringsdeskundige/haal_${type}_onderzoek`,
@@ -45,7 +46,7 @@
             lastResponse[type] = jsonResponse;
             console.log({ lastResponse });
             let listItems = '';
-            lastResponse[type].forEach((element) => {
+            lastResponse[type].forEach((element,index) => {
               let typeButton = type == 'beschikbaar' ? `<button  onclick='deelname(event)'
                             id=onderzoek-id-${element.id}
                             type="button" class="btn btn-primary">Inschrijven</button>
@@ -54,8 +55,8 @@
                             type="button" class="btn btn-danger">Uitschriven</button>
                            `
 
-                        listItems += `<li class='list-element'>
-                            <span>${element.title} </span>
+                        listItems += `<li class='list-element' id='list-element-${element.id}'>
+                            <span>${element.titel} ${index+1} </span>
                             <div>
                                 <p>${element.beschrijving}</p>
                             </div>
@@ -77,7 +78,7 @@
     if (event && event.target) {
       const id = event.target.id.replace('onderzoek-id-', '');
       console.log(id);
-      const clickedResearch = lastResponse.filter((element) => {
+      const clickedResearch = lastResponse.geregisteered.filter((element) => {
         if (element.id == id) {
           return true;
         }
@@ -85,7 +86,7 @@
       });
       console.log({ clickedResearch });
       $.ajax({
-        url: "http://127.0.0.1:5000/ervaringsdeskundige/deelnaam_onderzoek",
+        url: "http://127.0.0.1:5000/ervaringsdeskundige/uitschrijven_onderzoek",
         method: "POST",
         // jsonp: true,
         contentType: "application/json",
@@ -93,6 +94,9 @@
       })
         .done((response) => {
           console.log(response);
+          console.log(event.target.id)
+          $(`#list-element-${clickedResearch[0].id}`).remove();
+          alert('U bent uitgeschreven')
         })
         .fail((error) => {
           alert("Er is iets misgegaan! Probeer het later opnieuw");
@@ -105,7 +109,8 @@
     if (event && event.target) {
       const id = event.target.id.replace("onderzoek-id-", "");
       console.log(id);
-      const clickedResearch = lastResponse.filter((element) => {
+      console.log(lastResponse);
+      const clickedResearch = lastResponse.beschikbaar.filter((element) => {
         if (element.id == id) {
           return true;
         }
@@ -113,7 +118,7 @@
       });
       console.log({ clickedResearch });
       $.ajax({
-        url: "http://127.0.0.1:5000/ervaringsdeskundige/deelnaam_onderzoek",
+        url: "http://127.0.0.1:5000/ervaringsdeskundige/inschrijven_onderzoek",
         method: "POST",
         // jsonp: true,
         contentType: "application/json",
@@ -121,6 +126,10 @@
       })
         .done((response) => {
           console.log(response);
+          console.log(`#list-element-${clickedResearch[0].id}`)
+          console.log($(`#list-element-${clickedResearch[0].id}`))
+          $(`#list-element-${clickedResearch[0].id}`).remove();
+          alert('Dank u wel u bent ingeschreven')
         })
         .fail((error) => {
           alert("Er is iets misgegaan! Probeer het later opnieuw");
@@ -136,7 +145,7 @@
       clearInterval(interval);
       interval = setInterval(() => {
         getResearches();
-      }, 1000);
+      }, INTERVAL_TIME);
     });
     $("#geregisteered-href").on("click", () => {
       console.log("geregisteered clicked");
@@ -145,7 +154,7 @@
       clearInterval(interval);
       interval = setInterval(() => {
         getResearches("geregisteered");
-      }, 1000);
+      }, INTERVAL_TIME);
     });
 
     $("#beschikbaar-href").click();
@@ -172,7 +181,7 @@
   </ul>
   <div class="tab-content">
       <div class="tab-pane active" role="tabpanel" id="beschikbaar">
-          <h3> Beschikbaar </h3>
+          
           <ul id="list-beschikbaar">
           </ul>
       </div>
