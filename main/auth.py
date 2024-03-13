@@ -85,6 +85,6 @@ def login_evd():
         else:
             session['beheerder_id'] = user_data['id']
             session['display_name'] = user_data['voornaam']
-            return redirect(url_for('auth.login_beheerder'))
+            return redirect(url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht'))
 
     return render_template('login_evd.html')
