@@ -103,4 +103,4 @@ INSERT INTO Beperking ('beperking', 'type_beperking') VALUES ('Doof','Auditieve 
 ('ADHD','Cognitieve / Neurologische Beperkingen'),('Autisme','Cognitieve / Neurologische Beperkingen'),('Leerstoornis','Cognitieve / Neurologische Beperkingen'),
 ('Geheugen beperking','Cognitieve / Neurologische Beperkingen'),('Epilepsie','Cognitieve / Neurologische Beperkingen'),('Migraine','Cognitieve / Neurologische Beperkingen');
 
-INSERT INTO Beheerder ('gebruikersnaam','wachtwoord','voornaam','achternaam','team','is_admin') VALUES ('admin','admin','admin','admin','admin','1');
+-- INSERT INTO Beheerder ('gebruikersnaam','wachtwoord','voornaam','achternaam','team','is_admin') VALUES ('admin','admin','admin','admin','admin','1');

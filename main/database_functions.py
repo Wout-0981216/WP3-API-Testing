@@ -198,3 +198,68 @@ def get_evd():
     return count_evd
 
 
+def get_onderzoek(params = {'beschikbaar': True}):
+     connection = get_db()
+     cursor = connection.cursor()
+     print(params)
+     cursor.execute("SELECT * FROM Onderzoek WHERE beschikbaar = ?", (params['beschikbaar'],))
+     onderzoeks = cursor.fetchall()
+     cursor.close()
+     onderzoeks_as_dicts = [dict(row) for row in onderzoeks]
+     return onderzoeks_as_dicts
+# TO DO -remove alleen voor test
+def insert_dom_data():
+     connection = get_db()
+     cursor = connection.cursor()
+     cursor.execute('''INSERT INTO Onderzoek ("titel", "beschikbaar", "beschrijving", "datum_vanaf", "datum_tot", "type_onderzoek", "locatie", "met_beloning", "doelgroep_leeftijd_van", "doelgroep_leeftijd_tot", "organisatie_id", "status", "datum_status_update", "beheerder_id")
+     VALUES ('Nieuw onderzoek', 1, 'Dit is een nieuw onderzoek', '2024-03-07', '2024-03-14', 'Kwalitatief', 'Amsterdam', 1, 18, 60, 1, 'nieuwe', '2024-03-07 12:00:00', 1);''')
+     new_category_id = cursor.lastrowid
+     print(new_category_id)
+     connection.commit()
+     cursor.close()
+     return
+ 
+def get_geregisteered_onderzoek(params = {'ervaringsdeskundige_id': -1, 'status': 'nieuw'}):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""
+    SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
+
+    FROM Onderzoek
+    INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
+    WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ?
+""", ((params['ervaringsdeskundige_id'],)))
+
+    geregisteeredOnderzoeks = cursor.fetchall()
+    cursor.close()
+    geregisteeredOnderzoeks_as_dicts = [dict(row) for row in geregisteeredOnderzoeks]
+    return geregisteeredOnderzoeks_as_dicts
+    
+    
+def inschrijven_onderzoek(ervaringsdeskundige_id, onderzoek_id, beheerder_id, status, Datum_laatste_status_update):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""
+    INSERT INTO Inschrijving_ervaringsdeskundige_onderzoek (ervaringsdeskundige_id, onderzoek_id, status, beheerder_id, Datum_laatste_status_update)
+    VALUES (?, ?, ?, ?, ?)
+""", (ervaringsdeskundige_id, onderzoek_id, status, beheerder_id, Datum_laatste_status_update))
+    connection.commit()
+    cursor.close()
+    
+def uitschrijven_onderzoek(onderzoek_id):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""
+    DELETE FROM Inschrijving_ervaringsdeskundige_onderzoek
+    WHERE onderzoek_id = ?
+""", (onderzoek_id,))
+    connection.commit()
+    cursor.close()
+    
+def get_onderzoek_by_id(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""SELECT * FROM Onderzoek WHERE id = ?""", (id,) )
+    onderzoek = cursor.fetchone()
+    cursor.close()
+    return dict(onderzoek) if not None else {}
