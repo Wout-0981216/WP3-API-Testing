@@ -5,59 +5,64 @@
 {% endblock %}
 {% block content %}
 
+    <style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid black; /* Breedte van de rand */
+  }
+
+  th, td {
+    border: 1px solid black; /* Optioneel: Breedte van de binnenste randen van de cellen */
+    padding: 8px; /* Optioneel: Ruimte binnen de cellen */
+    text-align: left; /* Optioneel: Tekstuitlijning */
+  }
+</style>
+
 <h1 class="row justify-content-center">Beheer inschrijvingen op onderzoeken</h1>
-    <div class="container mt-5">
+<div class="container mt-5">
   <div class="row justify-content-left">
     <div class="col-md-6">
       <a href="#" class="btn btn-primary mb-3" onclick="history.back()">Terug</a>
     </div>
   </div>
-<div class="container mt-5">
-  <table id="evd-table" border="1">
-    <thead>
-      <tr>
-        <th>Naam</th>
-        <th>Achternaam</th>
-        <th>Gebruikersnaam</th>
-        <th>Email</th>
-        <th>Telefoonnummer</th>
-        <th>Geboortedatum</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for evd in all_evd%}
-      <tr>
-        <td>{{evd['voornaam']}}</td>
-        <td>{{evd['achternaam']}}</td>
-        <td>{{evd['gebruikersnaam']}}</td>
-        <td>{{evd['email']}}</td>
-        <td>{{evd['telefoonnummer']}}</td>
-        <td>{{evd['geboortedatum']}}</td>
-        <td>{{evd['status']}}</td>
-        <td>
-          <form method="post" action="{{ url_for('beheerder.view_evd', evd_id = evd['id']) }}">
-          <input type="submit" value="view">
-          </form>
-        </td>
-        {% if evd['status'] == 'nieuw' or evd['status'] == 'afgekeurd'%}
-        <td>
-          <form method="post" action="{{ url_for('beheerder.confirm_evd', evd_id = evd['id']) }}">
-          <input type="submit" value="goedkeuren">
-          </form>
-        </td>
-        {% endif %}
-        {% if evd['status'] == 'nieuw' or evd['status'] == 'goedgekeurd'%}
-        <td>
-          <form method="post" action="{{ url_for('beheerder.deny_evd', evd_id = evd['id']) }}">
-          <input type="submit" value="afkeuren">
-          </form>
-        </td>
-        {% endif %}
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="container mt-5">
+    <table id="evd-table" border="1">
+      <thead>
+        <tr>
+    <th style="width: 150px;">Naam</th>
+    <th style="width: 150px;">Achternaam</th>
+    <th style="width: 200px;">Onderzoek</th>
+    <th style="width: 150px;">Type onderzoek</th>
+    <th style="width: 100px;">Met beloning</th>
+    <th style="width: 175px;">Datum Inschrijving</th>
+    <th style="width:  75px;">Status</th>
+    <th style="width: 100px;">Actie</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inschrijving in inschrijvingen %}
+        <tr>
+          <td>{{ inschrijving['voornaam'] }}</td>
+          <td>{{ inschrijving['achternaam'] }}</td>
+          <td>{{ inschrijving['titel'] }}</td>
+          <td>{{ inschrijving['type_onderzoek'] }}</td>
+          <td>{{ inschrijving['met_beloniong'] }}</td>
+          <td>{{ inschrijving['Datum_laatste_status_update'] }}</td>
+          <td>{{ inschrijving['status'] }}</td>
+          <td>
+            <form method="post" action="{{ url_for('beheerder.view_evd', evd_id=inschrijving['id']) }}">
+              <input type="submit" value="Bekijk Ervaringsdeskundige">
+            </form>
+          <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=inschrijving['id']) }}">
+              <input type="submit" value="Bekijk Onderzoek">
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 {% endblock %}

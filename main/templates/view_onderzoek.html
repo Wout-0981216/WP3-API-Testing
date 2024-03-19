@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block head %}
+<link href="/static/css/register.css" rel="stylesheet">
+<script src="/static/javascript/javascript.js"></script>
+<style>
+  .note-box {
+    border: 2px solid black;
+    padding: 10px;
+  }
+</style>
+{% endblock %}
+{% block content %}
+
+<h1 class="row justify-content-center">Onderzoek bekijken</h1>
+<div class="container mt-5">
+  <div class="row justify-content-left">
+    <div class="col-md-6">
+      <a href="#" class="btn btn-primary mb-3" onclick="history.back()">Terug</a>
+    </div>
+  </div>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="row note-box">
+          <span class="fw-bold">Titel: {{ onderzoek_info['titel'] }}</span>
+          <span class="fw-bold">beschrijving: {{ onderzoek_info['beschrijving'] }}</span>
+          <span class="fw-bold">Datum vanaf: {{ onderzoek_info['datum_vanaf'] }}</span>
+          <span class="fw-bold">Datum tot: {{ onderzoek_info['datum_tot'] }}</span>
+          <span class="fw-bold">Type onderzoek: {{ onderzoek_info['type_onderzoek'] }}</span>
+          <span class="fw-bold">Locatie: {{ onderzoek_info['locatie'] }}</span>
+          <span class="fw-bold">Met beloning: {{ onderzoek_info['met_beloning'] }}</span>
+          <span class="fw-bold">Beloning: {{ onderzoek_info['beloning'] }}</span>
+          <span class="fw-bold">Doelgroep leeftijd vanaf: {{ onderzoek_info['doelgroep_leeftijd_van'] }}</span>
+          <span class="fw-bold">Doelgroep leeftijd tot: {{ onderzoek_info['doelgroep_leeftijd_tot'] }}</span>
+          <span class="fw-bold">doelgroep beperking: {{ onderzoek_info['doelgroep_beperking'] }}</span>
+          <span class="fw-bold">Status: {{ onderzoek_info['status'] }}</span>
+          <span class="fw-bold">Laatste update: {{ onderzoek_info['datum_status_update'] }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -263,3 +263,24 @@ def get_onderzoek_by_id(id):
     onderzoek = cursor.fetchone()
     cursor.close()
     return dict(onderzoek) if not None else {}
+
+def get_inschrijvingen_op_onderzoeken():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = ("""SELECT * FROM Inschrijving_ervaringsdeskundige_onderzoek 
+                INNER JOIN Ervaringsdeskundige ON Ervaringsdeskundige.id = Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id 
+                INNER JOIN Onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id 
+                WHERE Inschrijving_ervaringsdeskundige_onderzoek.status = 'nieuw'""")
+    cursor.execute(query)
+    inschrijving_onderzoek = cursor.fetchall()
+    cursor.close()
+    return inschrijving_onderzoek
+
+def vieuw_onderzoek_by_id(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    query = "SELECT * FROM onderzoeken WHERE id = ?"
+    cursor.execute(query, (id,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    return user_data
