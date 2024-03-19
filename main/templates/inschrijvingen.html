@@ -37,7 +37,8 @@
     <th style="width: 100px;">Met beloning</th>
     <th style="width: 175px;">Datum Inschrijving</th>
     <th style="width:  75px;">Status</th>
-    <th style="width: 100px;">Actie</th>
+    <th style="width: 200px;">Bekijk</th>
+            <th style="width: 200px;">Actie</th>
         </tr>
       </thead>
       <tbody>
@@ -58,6 +59,14 @@
                 <input type="submit" value="Bekijk Onderzoek">
             </form>
           </td>
+        <td>
+            <form method="post" action="{{ url_for('beheerder.confirm_inschrijving', onderzoek_id = inschrijving['onderzoek_id']) }}">
+                <input type="submit" value="Goedkeuren">
+            </form>
+            <form method="post" action="{{ url_for('beheerder.deny_inschrijving', onderzoek_id = inschrijving['onderzoek_id']) }}">
+                <input type="submit" value="Afkeuren">
+            </form>
+        </td>
         </tr>
         {% endfor %}
       </tbody>

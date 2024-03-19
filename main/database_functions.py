@@ -276,11 +276,47 @@ def get_inschrijvingen_op_onderzoeken():
     cursor.close()
     return inschrijving_onderzoek
 
-def vieuw_onderzoek_by_id(id):
-    connection = get_db()
-    cursor = connection.cursor()
-    query = "SELECT * FROM onderzoeken WHERE id = ?"
-    cursor.execute(query, (id,))
-    user_data = cursor.fetchone()
-    cursor.close()
-    return user_data
+
+def confirm_inschrijving_status(onderzoek_id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1  # moet nog veranderd worden
+
+        query = ("UPDATE Inschrijving_ervaringsdeskundige_onderzoek SET "
+                 "status = 'goedgekeurd', beheerder_id = ?, "
+                 "datum_laatste_status_update = ? WHERE onderzoek_id = ?")
+        cursor.execute(query, (beheerder_id, current_datetime, onderzoek_id))
+
+        connection.commit()
+        msg = "Status updated successfully."
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in updating status: {e}"
+    finally:
+        cursor.close()
+        return msg
+
+def deny_inschrijving_status(onderzoek_id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1  # moet nog veranderd worden
+
+        query = ("UPDATE Inschrijving_ervaringsdeskundige_onderzoek SET "
+                 "status = 'afgekeurd', beheerder_id = ?, "
+                 "datum_laatste_status_update = ? WHERE onderzoek_id = ?")
+        cursor.execute(query, (beheerder_id, current_datetime, onderzoek_id))
+
+        connection.commit()
+        msg = "Status updated successfully."
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in updating status: {e}"
+    finally:
+        cursor.close()
+        return msg
