@@ -51,11 +51,11 @@
           <td>{{ inschrijving['Datum_laatste_status_update'] }}</td>
           <td>{{ inschrijving['status'] }}</td>
           <td>
-            <form method="post" action="{{ url_for('beheerder.view_evd', evd_id=inschrijving['id']) }}">
-              <input type="submit" value="Bekijk Ervaringsdeskundige">
+              <form method="post" action="{{ url_for('beheerder.view_evd', evd_id=inschrijving['id']) }}">
+                <input type="submit" value="Bekijk ervaringsdeskundige">
             </form>
-          <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=inschrijving['id']) }}">
-              <input type="submit" value="Bekijk Onderzoek">
+              <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=inschrijving['id']) }}">
+                <input type="submit" value="Bekijk Onderzoek">
             </form>
           </td>
         </tr>
