@@ -341,3 +341,48 @@ def get_new_onderzoeken():
     onderzoeken = cursor.fetchall()
     cursor.close()
     return onderzoeken
+
+
+def confirm_onderzoek_status(id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1  # moet nog veranderd worden
+
+        query = ("UPDATE Onderzoek SET "
+                 "status = 'goedgekeurd', beheerder_id = ?, "
+                 "datum_status_update = ? WHERE id = ?")
+        cursor.execute(query, (beheerder_id, current_datetime, id))
+
+        connection.commit()
+        msg = "Status updated successfully."
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in updating status: {e}"
+    finally:
+        cursor.close()
+        return msg
+
+def deny_onderzoek_status(id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        current_datetime = datetime.datetime.now()
+        beheerder_id = 1  # moet nog veranderd worden
+
+        query = ("UPDATE Onderzoek SET "
+                 "status = 'afgekeurd', beheerder_id = ?, "
+                 "datum_status_update = ? WHERE id = ?")
+        cursor.execute(query, (beheerder_id, current_datetime, id))
+
+        connection.commit()
+        msg = "Status updated successfully."
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in updating status: {e}"
+    finally:
+        cursor.close()
+        return msg

@@ -77,6 +77,18 @@ def onderzoeken():
     return render_template('onderzoeken.html', nieuwe_onderzoeken=nieuwe_onderzoeken)
 
 
+@beheerder_blueprint.route("/onderzoek_goedkeuren/<id>", methods=['GET', 'POST'])
+def confirm_onderzoek(id):
+    confirm_onderzoek_status(id)
+    return redirect(url_for('beheerder.onderzoeken'))
+
+
+@beheerder_blueprint.route("/onderzoek_afkeuren/<id>", methods=['GET', 'POST'])
+def deny_onderzoek(id):
+    deny_onderzoek_status(id)
+    return redirect(url_for('beheerder.onderzoeken'))
+
+
 @beheerder_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
 def evd_overzicht():
     all_evd = get_all_evd_from_database()
