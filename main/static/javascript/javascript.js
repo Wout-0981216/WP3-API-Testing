@@ -63,4 +63,13 @@ function get_current_date(){
 
   today = yyyy + '-' + mm + '-' + dd;
   return today
-};
+}
+
+$(document).ready(function(){
+    $("#myInput").on("keyup", function() {
+      var value = $(this).val().toLowerCase();
+      $("#evd-table tbody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
