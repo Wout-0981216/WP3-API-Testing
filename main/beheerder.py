@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify
+from flask import Blueprint, render_template, redirect, url_for, jsonify, flash
 from database_functions import *
 
 
@@ -38,13 +38,35 @@ def all_evd_to_be_confirmed():
 @beheerder_blueprint.route("/ervaringsdeskundige_goedkeuren/<evd_id>", methods=['GET', 'POST'])
 def confirm_evd(evd_id):
     confirm_evd_status(evd_id)
+    flash('Ervaringsdeskundige succesvol goedgekeurd!', 'success')
     return redirect(url_for('beheerder.all_evd_to_be_confirmed'))
 
 
 @beheerder_blueprint.route("/ervaringsdeskundige_afkeuren/<evd_id>", methods=['GET', 'POST'])
 def deny_evd(evd_id):
     deny_evd_status(evd_id)
+    flash('Ervaringsdeskundige succesvol afgekeurd!', 'success')
     return redirect(url_for('beheerder.all_evd_to_be_confirmed'))
+
+
+@beheerder_blueprint.route("/ervaringsdeskundige_goedkeuren/no_redirect/<evd_id>", methods=['GET', 'POST'])
+def confirm_evd_no_redirect(evd_id):
+    confirm_evd_status(evd_id)
+    flash('Ervaringsdeskundige succesvol goedgekeurd!', 'success')
+    return redirect(url_for('beheerder.evd_overzicht'))
+
+
+@beheerder_blueprint.route("/ervaringsdeskundige_afkeuren/no_redirect/<evd_id>", methods=['GET', 'POST'])
+def deny_evd_no_redirect(evd_id):
+    deny_evd_status(evd_id)
+    flash('Ervaringsdeskundige succesvol afgekeurd!', 'success')
+    return redirect(url_for('beheerder.evd_overzicht'))
+
+
+@beheerder_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
+def evd_overzicht():
+    all_evd = get_all_evd_from_database()
+    return render_template("ervaringsdeskundige_overzicht.html", all_evd=all_evd)
 
 
 @beheerder_blueprint.route("/ervaringsdeskundige_view/<evd_id>", methods=['GET', 'POST'])
@@ -86,52 +108,54 @@ def view_alle_onderzoeken():
 @beheerder_blueprint.route("/onderzoek_goedkeuren/<id>", methods=['GET', 'POST'])
 def confirm_onderzoek(id):
     confirm_onderzoek_status(id)
+    flash('Onderzoek succesvol goedgekeurd!', 'success')
     return redirect(url_for('beheerder.onderzoeken'))
 
 
 @beheerder_blueprint.route("/onderzoek_afkeuren/<id>", methods=['GET', 'POST'])
 def deny_onderzoek(id):
     deny_onderzoek_status(id)
+    flash('Onderzoek succesvol afgekeurd!', 'success')
     return redirect(url_for('beheerder.onderzoeken'))
 
 
 @beheerder_blueprint.route("/onderzoek_goedkeuren_no_redirect/<id>", methods=['GET', 'POST'])
 def confirm_onderzoek_no_redirect(id):
     confirm_onderzoek_status(id)
+    flash('Onderzoek succesvol goedgekeurd!', 'success')
     return redirect(url_for('beheerder.view_alle_onderzoeken'))
 
 
 @beheerder_blueprint.route("/onderzoek_afkeuren_no_redirect/<id>", methods=['GET', 'POST'])
 def deny_onderzoek_no_redirect(id):
     deny_onderzoek_status(id)
+    flash('Onderzoek succesvol afgekeurd!', 'success')
     return redirect(url_for('beheerder.view_alle_onderzoeken'))
-
-
-@beheerder_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
-def evd_overzicht():
-    all_evd = get_all_evd_from_database()
-    return render_template("ervaringsdeskundige_overzicht.html", all_evd=all_evd)
 
 
 @beheerder_blueprint.route("/inschrijving_goedkeuren/<onderzoek_id>", methods=['GET', 'POST'])
 def confirm_inschrijving(onderzoek_id):
     confirm_inschrijving_status(onderzoek_id)
+    flash('Inschrijving succesvol goedgekeurd!', 'success')
     return redirect(url_for('beheerder.view_evd_inschrijving'))
 
 
 @beheerder_blueprint.route("/inschrijving_afkeuren<onderzoek_id>", methods=['GET', 'POST'])
 def deny_inschrijving(onderzoek_id):
     deny_inschrijving_status(onderzoek_id)
+    flash('Inschrijving succesvol afgekeurd!', 'success')
     return redirect(url_for('beheerder.view_evd_inschrijving'))
 
 
 @beheerder_blueprint.route("/inschrijving_goedkeuren_no_redirect/<onderzoek_id>", methods=['GET', 'POST'])
 def confirm_inschrijving_no_redirect(onderzoek_id):
     confirm_inschrijving_status(onderzoek_id)
+    flash('Inschrijving succesvol goedgekeurd!', 'success')
     return redirect(url_for('beheerder.view_all_evd_inschrijving'))
 
 
 @beheerder_blueprint.route("/inschrijving_afkeuren_no_redirect/<onderzoek_id>", methods=['GET', 'POST'])
 def deny_inschrijving_no_redirect(onderzoek_id):
     deny_inschrijving_status(onderzoek_id)
+    flash('Inschrijving succesvol afgekeurd!', 'success')
     return redirect(url_for('beheerder.view_all_evd_inschrijving'))

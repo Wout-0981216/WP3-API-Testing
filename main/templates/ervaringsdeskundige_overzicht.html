@@ -43,14 +43,14 @@
         </td>
         {% if evd['status'] == 'nieuw' or evd['status'] == 'afgekeurd'%}
         <td>
-          <form method="post" action="{{ url_for('beheerder.confirm_evd', evd_id = evd['id']) }}">
+          <form method="post" action="{{ url_for('beheerder.confirm_evd_no_redirect', evd_id = evd['id']) }}">
           <input type="submit" value="goedkeuren">
           </form>
         </td>
         {% endif %}
         {% if evd['status'] == 'nieuw' or evd['status'] == 'goedgekeurd'%}
         <td>
-          <form method="post" action="{{ url_for('beheerder.deny_evd', evd_id = evd['id']) }}">
+          <form method="post" action="{{ url_for('beheerder.deny_evd_no_redirect', evd_id = evd['id']) }}">
           <input type="submit" value="afkeuren">
           </form>
         </td>
