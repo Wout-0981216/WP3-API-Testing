@@ -38,9 +38,10 @@
     <th style="width: 175px;">Locatie</th>
     <th style="width:  75px;">Met beloning</th>
     <th style="width: 200px;">leeftijd vanaf</th>
-    <th style="width: 200px;">leeftijd tot</th>
-    <th style="width: 200px;">Status</th>
-            <th style="width: 200px;">Actie</th>
+    <th style="width: 150px;">leeftijd tot</th>
+    <th style="width: 125px;">Status</th>
+            <th style="width: 175px;">Bekijken</th>
+            <th style="width: 175px;">Actie</th>
         </tr>
       </thead>
       <tbody>
@@ -57,6 +58,10 @@
           <td>{{ nieuwe_onderzoeken['doelgroep_leeftijd_tot'] }}</td>
           <td>{{ nieuwe_onderzoeken['status'] }}</td>
           <td>
+            <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=nieuwe_onderzoeken['id']) }}">
+                <input type="submit" value="Bekijk Onderzoek">
+            </form>
+          </td>
         {% endfor %}
       </tbody>
     </table>
