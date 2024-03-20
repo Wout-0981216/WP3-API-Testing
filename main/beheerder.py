@@ -71,6 +71,12 @@ def view_onderzoek(onderzoek_id):
     return render_template('view_onderzoek.html', onderzoek_info=onderzoek_info)
 
 
+@beheerder_blueprint.route("/onderzoeken", methods=['GET', 'POST'])
+def onderzoeken():
+    nieuwe_onderzoeken = get_new_onderzoeken()
+    return render_template('onderzoeken.html', nieuwe_onderzoeken=nieuwe_onderzoeken)
+
+
 @beheerder_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
 def evd_overzicht():
     all_evd = get_all_evd_from_database()

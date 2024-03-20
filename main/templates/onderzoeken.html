@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block head %}
+<link href="/static/css/register.css" rel="stylesheet">
+<script src="/static/javascript/javascript.js"></script>
+{% endblock %}
+{% block content %}
+
+    <style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid black; /* Breedte van de rand */
+  }
+
+  th, td {
+    border: 1px solid black; /* Optioneel: Breedte van de binnenste randen van de cellen */
+    padding: 8px; /* Optioneel: Ruimte binnen de cellen */
+    text-align: left; /* Optioneel: Tekstuitlijning */
+  }
+</style>
+
+<h1 class="row justify-content-center">Bekijk nieuwe onderzoeken</h1>
+<div class="container mt-5">
+  <div class="row justify-content-left">
+    <div class="col-md-6">
+      <a href="{{ url_for('beheerder.beheerder') }}" class="btn btn-primary mb-3">Terug</a>
+    </div>
+  </div>
+  <div class="container mt-5">
+    <table id="evd-table" border="1">
+      <thead>
+        <tr>
+    <th style="width: 150px;">Titel</th>
+    <th style="width: 150px;">Beschrijving</th>
+    <th style="width: 200px;">Datum vanaf</th>
+    <th style="width: 150px;">Datum tot</th>
+    <th style="width: 100px;">Type onderzoek</th>
+    <th style="width: 175px;">Locatie</th>
+    <th style="width:  75px;">Met beloning</th>
+    <th style="width: 200px;">leeftijd vanaf</th>
+    <th style="width: 200px;">leeftijd tot</th>
+    <th style="width: 200px;">Status</th>
+            <th style="width: 200px;">Actie</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for nieuwe_onderzoeken in nieuwe_onderzoeken %}
+        <tr>
+          <td>{{ nieuwe_onderzoeken['titel'] }}</td>
+          <td>{{ nieuwe_onderzoeken['beschrijving'] }}</td>
+          <td>{{ nieuwe_onderzoeken['datum_vanaf'] }}</td>
+          <td>{{ nieuwe_onderzoeken['datum_tot'] }}</td>
+          <td>{{ nieuwe_onderzoeken['type_onderzoek'] }}</td>
+          <td>{{ nieuwe_onderzoeken['locatie'] }}</td>
+          <td>{{ "Ja" if nieuwe_onderzoeken['met_beloning'] == 1 else "Nee" }}</td>
+          <td>{{ nieuwe_onderzoeken['doelgroep_leeftijd_van'] }}</td>
+          <td>{{ nieuwe_onderzoeken['doelgroep_leeftijd_tot'] }}</td>
+          <td>{{ nieuwe_onderzoeken['status'] }}</td>
+          <td>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
