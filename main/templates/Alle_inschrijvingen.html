@@ -19,7 +19,7 @@
   }
 </style>
 
-<h1 class="row justify-content-center">Bekijk inschrijvingen op onderzoeken</h1>
+<h1 class="row justify-content-center">Bekijk alle inschrijvingen op onderzoeken</h1>
 <div class="container mt-5">
   <div class="row justify-content-left">
     <div class="col-md-6">
@@ -42,31 +42,37 @@
         </tr>
       </thead>
       <tbody>
-        {% for inschrijvingen in inschrijvingen %}
+        {% for alle_inschrijvingen in alle_inschrijvingen %}
         <tr>
-          <td>{{ inschrijvingen['voornaam'] }}</td>
-          <td>{{ inschrijvingen['achternaam'] }}</td>
-          <td>{{ inschrijvingen['titel'] }}</td>
-          <td>{{ inschrijvingen['type_onderzoek'] }}</td>
-          <td>{{ inschrijvingen['met_beloniong'] }}</td>
-          <td>{{ inschrijvingen['Datum_laatste_status_update'] }}</td>
-          <td>{{ inschrijvingen['status'] }}</td>
+          <td>{{ alle_inschrijvingen['voornaam'] }}</td>
+          <td>{{ alle_inschrijvingen['achternaam'] }}</td>
+          <td>{{ alle_inschrijvingen['titel'] }}</td>
+          <td>{{ alle_inschrijvingen['type_onderzoek'] }}</td>
+          <td>{{ alle_inschrijvingen['met_beloniong'] }}</td>
+          <td>{{ alle_inschrijvingen['Datum_laatste_status_update'] }}</td>
+          <td>{{ alle_inschrijvingen['status'] }}</td>
           <td>
-              <form method="post" action="{{ url_for('beheerder.view_evd', evd_id=inschrijvingen['id']) }}">
+              <form method="post" action="{{ url_for('beheerder.view_evd', evd_id=alle_inschrijvingen['id']) }}">
                 <input type="submit" value="Bekijk ervaringsdeskundige">
             </form>
-              <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=inschrijvingen['id']) }}">
+              <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=alle_inschrijvingen['id']) }}">
                 <input type="submit" value="Bekijk Onderzoek">
             </form>
           </td>
+            {% if alle_inschrijvingen['status'] == 'nieuw' or alle_inschrijvingen['status'] == 'afgekeurd'%}
         <td>
-            <form method="post" action="{{ url_for('beheerder.confirm_inschrijving', onderzoek_id = inschrijvingen['onderzoek_id']) }}">
+            <form method="post" action="{{ url_for('beheerder.confirm_inschrijving_no_redirect', onderzoek_id = alle_inschrijvingen['onderzoek_id']) }}">
                 <input type="submit" value="Goedkeuren">
             </form>
-            <form method="post" action="{{ url_for('beheerder.deny_inschrijving', onderzoek_id = inschrijvingen['onderzoek_id']) }}">
+        </td>
+            {% endif %}
+        {% if alle_inschrijvingen['status'] == 'nieuw' or alle_inschrijvingen['status'] == 'goedgekeurd'%}
+            <td>
+            <form method="post" action="{{ url_for('beheerder.deny_inschrijving_no_redirect', onderzoek_id = alle_inschrijvingen['onderzoek_id']) }}">
                 <input type="submit" value="Afkeuren">
             </form>
         </td>
+        {% endif %}
         </tr>
         {% endfor %}
       </tbody>

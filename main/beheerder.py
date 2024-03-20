@@ -49,6 +49,11 @@ def view_evd_inschrijving():
     inschrijvingen = get_inschrijvingen_op_onderzoeken()
     return render_template('inschrijvingen.html', inschrijvingen=inschrijvingen)
 
+@beheerder_blueprint.route("/ervaringsdeskundige_all_inschrijvingen", methods=['GET', 'POST'])
+def view_all_evd_inschrijving():
+    alle_inschrijvingen = get_alle_inschrijvingen_op_onderzoeken()
+    return render_template('Alle_inschrijvingen.html', alle_inschrijvingen=alle_inschrijvingen)
+
 @beheerder_blueprint.route("/onderzoek_view/<onderzoek_id>", methods=['GET', 'POST'])
 def view_onderzoek(onderzoek_id):
     onderzoek_info = get_onderzoek_by_id(onderzoek_id)
@@ -69,3 +74,13 @@ def confirm_inschrijving(onderzoek_id):
 def deny_inschrijving(onderzoek_id):
     deny_inschrijving_status(onderzoek_id)
     return redirect(url_for('beheerder.view_evd_inschrijving'))
+
+@beheerder_blueprint.route("/inschrijving_goedkeuren_no_redirect/<onderzoek_id>", methods=['GET', 'POST'])
+def confirm_inschrijving_no_redirect(onderzoek_id):
+    confirm_inschrijving_status(onderzoek_id)
+    return redirect(url_for('beheerder.view_all_evd_inschrijving'))
+
+@beheerder_blueprint.route("/inschrijving_afkeuren_no_redirect/<onderzoek_id>", methods=['GET', 'POST'])
+def deny_inschrijving_no_redirect(onderzoek_id):
+    deny_inschrijving_status(onderzoek_id)
+    return redirect(url_for('beheerder.view_all_evd_inschrijving'))

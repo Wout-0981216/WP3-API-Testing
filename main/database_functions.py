@@ -276,6 +276,17 @@ def get_inschrijvingen_op_onderzoeken():
     cursor.close()
     return inschrijving_onderzoek
 
+def get_alle_inschrijvingen_op_onderzoeken():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = ("""SELECT * FROM Inschrijving_ervaringsdeskundige_onderzoek 
+                INNER JOIN Ervaringsdeskundige ON Ervaringsdeskundige.id = Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id 
+                INNER JOIN Onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id """)
+    cursor.execute(query)
+    alle_inschrijvingen = cursor.fetchall()
+    cursor.close()
+    return alle_inschrijvingen
+
 
 def confirm_inschrijving_status(onderzoek_id):
     try:
