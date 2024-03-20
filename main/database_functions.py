@@ -342,6 +342,15 @@ def get_new_onderzoeken():
     cursor.close()
     return onderzoeken
 
+def get_all_onderzoeken():
+    connection = get_db()
+    cursor = connection.cursor()
+    query = ("""SELECT * FROM Onderzoek LEFT JOIN beperking on Onderzoek.doelgroep_beperking = beperking.id""")
+    cursor.execute(query)
+    alle_onderzoeken = cursor.fetchall()
+    cursor.close()
+    return alle_onderzoeken
+
 
 def confirm_onderzoek_status(id):
     try:

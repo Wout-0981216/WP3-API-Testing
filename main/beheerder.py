@@ -77,6 +77,12 @@ def onderzoeken():
     return render_template('onderzoeken.html', nieuwe_onderzoeken=nieuwe_onderzoeken)
 
 
+@beheerder_blueprint.route("/alle_onderzoeken", methods=['GET', 'POST'])
+def view_alle_onderzoeken():
+    alle_onderzoeken = get_all_onderzoeken()
+    return render_template('alle_onderzoeken.html', alle_onderzoeken=alle_onderzoeken)
+
+
 @beheerder_blueprint.route("/onderzoek_goedkeuren/<id>", methods=['GET', 'POST'])
 def confirm_onderzoek(id):
     confirm_onderzoek_status(id)
@@ -87,6 +93,18 @@ def confirm_onderzoek(id):
 def deny_onderzoek(id):
     deny_onderzoek_status(id)
     return redirect(url_for('beheerder.onderzoeken'))
+
+
+@beheerder_blueprint.route("/onderzoek_goedkeuren_no_redirect/<id>", methods=['GET', 'POST'])
+def confirm_onderzoek_no_redirect(id):
+    confirm_onderzoek_status(id)
+    return redirect(url_for('beheerder.view_alle_onderzoeken'))
+
+
+@beheerder_blueprint.route("/onderzoek_afkeuren_no_redirect/<id>", methods=['GET', 'POST'])
+def deny_onderzoek_no_redirect(id):
+    deny_onderzoek_status(id)
+    return redirect(url_for('beheerder.view_alle_onderzoeken'))
 
 
 @beheerder_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])

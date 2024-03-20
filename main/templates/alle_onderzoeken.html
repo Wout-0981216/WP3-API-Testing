@@ -19,7 +19,7 @@
   }
 </style>
 
-<h1 class="row justify-content-center">Bekijk nieuwe onderzoeken</h1>
+<h1 class="row justify-content-center">Bekijk Alle onderzoeken</h1>
 <div class="container mt-5">
   <div class="row justify-content-left">
     <div class="col-md-6">
@@ -46,32 +46,36 @@
         </tr>
       </thead>
       <tbody>
-        {% for nieuwe_onderzoeken in nieuwe_onderzoeken %}
+        {% for alle_onderzoeken in alle_onderzoeken %}
         <tr>
-          <td>{{ nieuwe_onderzoeken['titel'] }}</td>
-          <td>{{ nieuwe_onderzoeken['beschrijving'] }}</td>
-          <td>{{ nieuwe_onderzoeken['datum_vanaf'] }}</td>
-          <td>{{ nieuwe_onderzoeken['datum_tot'] }}</td>
-          <td>{{ nieuwe_onderzoeken['type_onderzoek'] }}</td>
-          <td>{{ nieuwe_onderzoeken['locatie'] }}</td>
-          <td>{{ "Ja" if nieuwe_onderzoeken['met_beloning'] == 1 else "Nee" }}</td>
-          <td>{{ nieuwe_onderzoeken['beperking'] }}</td>
-          <td>{{ nieuwe_onderzoeken['doelgroep_leeftijd_van'] }}</td>
-          <td>{{ nieuwe_onderzoeken['doelgroep_leeftijd_tot'] }}</td>
-          <td>{{ nieuwe_onderzoeken['status'] }}</td>
+          <td>{{ alle_onderzoeken['titel'] }}</td>
+          <td>{{ alle_onderzoeken['beschrijving'] }}</td>
+          <td>{{ alle_onderzoeken['datum_vanaf'] }}</td>
+          <td>{{ alle_onderzoeken['datum_tot'] }}</td>
+          <td>{{ alle_onderzoeken['type_onderzoek'] }}</td>
+          <td>{{ alle_onderzoeken['locatie'] }}</td>
+          <td>{{ "Ja" if alle_onderzoeken['met_beloning'] == 1 else "Nee" }}</td>
+          <td>{{ alle_onderzoeken['beperking'] }}</td>
+          <td>{{ alle_onderzoeken['doelgroep_leeftijd_van'] }}</td>
+          <td>{{ alle_onderzoeken['doelgroep_leeftijd_tot'] }}</td>
+          <td>{{ alle_onderzoeken['status'] }}</td>
           <td>
-            <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=nieuwe_onderzoeken['id']) }}">
+            <form method="post" action="{{ url_for('beheerder.view_onderzoek', onderzoek_id=alle_onderzoeken['id']) }}">
                 <input type="submit" value="Bekijk Onderzoek">
             </form>
           </td>
             <td>
-            <form method="post" action="{{ url_for('beheerder.confirm_onderzoek', id = nieuwe_onderzoeken['id']) }}">
+            {% if alle_onderzoeken['status'] == 'nieuwe' or alle_onderzoeken['status'] == 'afgekeurd'%}
+            <form method="post" action="{{ url_for('beheerder.confirm_onderzoek_no_redirect', id = alle_onderzoeken['id']) }}">
                 <input type="submit" value="Goedkeuren">
             </form>
-            <form method="post" action="{{ url_for('beheerder.deny_onderzoek', id = nieuwe_onderzoeken['id']) }}">
+                {% endif %}
+         {% if alle_onderzoeken['status'] == 'nieuwe' or alle_onderzoeken['status'] == 'goedgekeurd'%}
+            <form method="post" action="{{ url_for('beheerder.deny_onderzoek_no_redirect', id = alle_onderzoeken['id']) }}">
                 <input type="submit" value="Afkeuren">
             </form>
         </td>
+        {% endif %}
         </tr>
         {% endfor %}
       </tbody>
