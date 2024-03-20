@@ -4,60 +4,72 @@ from database_functions import *
 
 beheerder_blueprint = Blueprint('beheerder', __name__)
 
+
 @beheerder_blueprint.route('/beheerder', methods=['GET'])
 def beheerder():
     aanvragen_data = get_aanvragen()
     return render_template('beheerder_overzicht.html', aanvragen=aanvragen_data)
+
 
 @beheerder_blueprint.route('/get_aanvragen', methods=['GET'])
 def get_aanvragen_route():
     aanvragen = get_aanvragen()
     return jsonify({'aanvragen': aanvragen})
 
+
 @beheerder_blueprint.route('/get_onderzoeken', methods=['GET'])
 def get_onderzoeken_route():
     onderzoeken = get_onderzoeken()
     return jsonify({'onderzoeken': onderzoeken})
+
 
 @beheerder_blueprint.route('/get_evd', methods=['GET'])
 def get_evder_route():
     evd = get_evd()
     return jsonify({'evd': evd})
 
+
 @beheerder_blueprint.route("/ervaringsdeskundige_goedkeuren", methods=['GET', 'POST'])
 def all_evd_to_be_confirmed():
     all_evd_to_confirm = get_evd_from_database_by_status_nieuw()
     return render_template('ervaringsdeskundige_goedkeuren.html', all_evd_to_confirm=all_evd_to_confirm)
+
 
 @beheerder_blueprint.route("/ervaringsdeskundige_goedkeuren/<evd_id>", methods=['GET', 'POST'])
 def confirm_evd(evd_id):
     confirm_evd_status(evd_id)
     return redirect(url_for('beheerder.all_evd_to_be_confirmed'))
 
+
 @beheerder_blueprint.route("/ervaringsdeskundige_afkeuren/<evd_id>", methods=['GET', 'POST'])
 def deny_evd(evd_id):
     deny_evd_status(evd_id)
     return redirect(url_for('beheerder.all_evd_to_be_confirmed'))
+
 
 @beheerder_blueprint.route("/ervaringsdeskundige_view/<evd_id>", methods=['GET', 'POST'])
 def view_evd(evd_id):
     evd_info = get_evd_from_database_by_id(evd_id)
     return render_template('view_ervaringsdeskundige.html', evd_info=evd_info)
 
+
 @beheerder_blueprint.route("/ervaringsdeskundige_inschrijving", methods=['GET', 'POST'])
 def view_evd_inschrijving():
     inschrijvingen = get_inschrijvingen_op_onderzoeken()
     return render_template('inschrijvingen.html', inschrijvingen=inschrijvingen)
+
 
 @beheerder_blueprint.route("/ervaringsdeskundige_all_inschrijvingen", methods=['GET', 'POST'])
 def view_all_evd_inschrijving():
     alle_inschrijvingen = get_alle_inschrijvingen_op_onderzoeken()
     return render_template('Alle_inschrijvingen.html', alle_inschrijvingen=alle_inschrijvingen)
 
+
 @beheerder_blueprint.route("/onderzoek_view/<onderzoek_id>", methods=['GET', 'POST'])
 def view_onderzoek(onderzoek_id):
     onderzoek_info = get_onderzoek_by_id(onderzoek_id)
     return render_template('view_onderzoek.html', onderzoek_info=onderzoek_info)
+
 
 @beheerder_blueprint.route("/ervaringsdeskundige_overzicht", methods=['GET', 'POST'])
 def evd_overzicht():
@@ -70,15 +82,18 @@ def confirm_inschrijving(onderzoek_id):
     confirm_inschrijving_status(onderzoek_id)
     return redirect(url_for('beheerder.view_evd_inschrijving'))
 
+
 @beheerder_blueprint.route("/inschrijving_afkeuren<onderzoek_id>", methods=['GET', 'POST'])
 def deny_inschrijving(onderzoek_id):
     deny_inschrijving_status(onderzoek_id)
     return redirect(url_for('beheerder.view_evd_inschrijving'))
 
+
 @beheerder_blueprint.route("/inschrijving_goedkeuren_no_redirect/<onderzoek_id>", methods=['GET', 'POST'])
 def confirm_inschrijving_no_redirect(onderzoek_id):
     confirm_inschrijving_status(onderzoek_id)
     return redirect(url_for('beheerder.view_all_evd_inschrijving'))
+
 
 @beheerder_blueprint.route("/inschrijving_afkeuren_no_redirect/<onderzoek_id>", methods=['GET', 'POST'])
 def deny_inschrijving_no_redirect(onderzoek_id):
