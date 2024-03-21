@@ -103,6 +103,11 @@ def login_beheerder():
 #             session['display_name'] = user_data['voornaam']
 #             return redirect(url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht'))
 
+@auth_blueprint.route("/login-ervaringsdeskundige", methods=['GET', 'POST'])
+def login_evd():
+    return render_template('login_evd.html')
+
+
 @auth_blueprint.route("/login-ervaringsdeskundige-new", methods=['POST'])
 def login_evd_new(): 
      gebruikersnaam = request.form['gebruikersnaamEvd']  if request.form is not None and   request.form['gebruikersnaamEvd'] is not None  else  request.json['gebruikersnaamEvd'] if request.json  is not None and request.json['gebruikersnaamEvd']  is not None else None

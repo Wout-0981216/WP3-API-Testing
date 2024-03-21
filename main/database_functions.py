@@ -202,7 +202,7 @@ def get_onderzoek(evd, params = {'beschikbaar': True}):
      connection = get_db()
      cursor = connection.cursor()
      print(params)
-     cursor.execute("SELECT * FROM Onderzoek WHERE beschikbaar = ?", (params['beschikbaar'],))
+     cursor.execute("SELECT * FROM Onderzoek WHERE status = ?", ("goedgekeurd",))
      onderzoeks = cursor.fetchall()
      cursor.close()
      geldige_onderzoeks = []
