@@ -91,10 +91,17 @@ def login_beheerder():
 #     return render_template('login_evd.html')
 
 
-@auth_blueprint.route("/login-ervaringsdeskundige", methods=['GET', 'POST'])
-def login_evd():
-    return render_template('login_evd.html')
+# @auth_blueprint.route("/login-ervaringsdeskundige", methods=['GET', 'POST'])
+# def login_evd():
+#     return render_template('login_evd.html')
 
+#         if user_data is None or user_data['wachtwoord'] != password:
+#             flash('Foutieve gebruikersnaam/wachtwoord')
+#             return render_template('login_evd.html')
+#         else:
+#             session['beheerder_id'] = user_data['id']
+#             session['display_name'] = user_data['voornaam']
+#             return redirect(url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht'))
 
 @auth_blueprint.route("/login-ervaringsdeskundige-new", methods=['POST'])
 def login_evd_new(): 
