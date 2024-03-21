@@ -2,7 +2,7 @@ from flask import g
 import sqlite3
 import os
 import datetime
-
+from validate import is_een_geldige_kandidaat
 current_directory = os.path.dirname(os.path.abspath(__file__))
 database_path = os.path.join(current_directory, 'lib\database', 'database.db')
 
@@ -198,15 +198,19 @@ def get_evd():
     return count_evd
 
 
-def get_onderzoek(params = {'beschikbaar': True}):
+def get_onderzoek(evd, params = {'beschikbaar': True}):
      connection = get_db()
      cursor = connection.cursor()
      print(params)
      cursor.execute("SELECT * FROM Onderzoek WHERE beschikbaar = ?", (params['beschikbaar'],))
      onderzoeks = cursor.fetchall()
      cursor.close()
-     onderzoeks_as_dicts = [dict(row) for row in onderzoeks]
-     return onderzoeks_as_dicts
+     geldige_onderzoeks = []
+     for onderzoek in onderzoeks:
+        dict_onderzoek = dict(onderzoek)
+        if is_een_geldige_kandidaat(evd,dict_onderzoek):
+            geldige_onderzoeks.append(dict_onderzoek)
+     return geldige_onderzoeks
 # TO DO -remove alleen voor test
 def insert_dom_data():
      connection = get_db()
@@ -219,17 +223,23 @@ def insert_dom_data():
      cursor.close()
      return
  
-def get_geregisteered_onderzoek(params = {'ervaringsdeskundige_id': -1, 'status': 'nieuw'}):
+def get_geregisteered_onderzoek(params = {'ervaringsdeskundige_id': -1, 'status': 'beschikbaar'}):
     connection = get_db()
     cursor = connection.cursor()
-    cursor.execute("""
-    SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
-
-    FROM Onderzoek
-    INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
-    WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ?
-""", ((params['ervaringsdeskundige_id'],)))
-
+    if params['status'] != 'beschikbaar':
+      cursor.execute("""
+      SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
+      FROM Onderzoek
+      INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
+      WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ? and Inschrijving_ervaringsdeskundige_onderzoek.status = ?
+      """, ((params['ervaringsdeskundige_id'],params['status'],)) )
+    else: 
+      cursor.execute("""
+      SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
+      FROM Onderzoek
+      INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
+      WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ?
+      """, ((params['ervaringsdeskundige_id'],)))
     geregisteeredOnderzoeks = cursor.fetchall()
     cursor.close()
     geregisteeredOnderzoeks_as_dicts = [dict(row) for row in geregisteeredOnderzoeks]
@@ -255,11 +265,78 @@ def uitschrijven_onderzoek(onderzoek_id):
 """, (onderzoek_id,))
     connection.commit()
     cursor.close()
-    
+ 
+def get_gere_onderzoek_by_evd_id(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""SELECT * FROM Inschrijving_ervaringsdeskundige_onderzoek WHERE ervaringsdeskundige_id = ?  """, (id,) )
+    onderzoeks = cursor.fetchall()
+    cursor.close()
+    onderzoeks_as_dicts = [dict(row) for row in onderzoeks]
+    return onderzoeks_as_dicts
+
+
+
+
 def get_onderzoek_by_id(id):
     connection = get_db()
     cursor = connection.cursor()
-    cursor.execute("""SELECT * FROM Onderzoek WHERE id = ?""", (id,) )
+    cursor.execute("""SELECT * FROM Onderzoek WHERE id = ?  """, (id,) )
     onderzoek = cursor.fetchone()
     cursor.close()
     return dict(onderzoek) if not None else {}
+
+
+def create_beheerder(): 
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""
+    INSERT INTO Beheerder ('gebruikersnaam','wachtwoord','voornaam','achternaam','team','is_admin')
+    VALUES (?, ?, ?, ?, ?, ?)
+""", ('admin','admin','admin','admin','admin','1'))
+    print('create_beheerder')
+    connection.commit()
+    cursor.close()
+
+
+
+def user_exist(gebruikersnaam,password):     
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""SELECT * FROM Ervaringsdeskundige WHERE gebruikersnaam = ? and wachtwoord = ? """, (gebruikersnaam,password,) )
+    result = cursor.fetchone()
+    return False if result is None else True
+
+# def get_beperking_by_id(id):
+
+def get_evd_beperkinging(id): 
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""SELECT * FROM Ervaringsdeskundige_beperking WHERE ervaringsdeskundige_id = ?""", (id,) )
+    result = cursor.fetchall()
+    beperkings = []
+    for beperking in result: 
+      dict_beperking = dict(beperking)
+      cursor.execute("""SELECT * FROM Beperking WHERE id = ?""", (dict_beperking["beperking_id"],) )
+      beperking_result = cursor.fetchone()
+      dict_beperking_result = dict(beperking_result)
+      beperkings.append(dict_beperking_result)
+    cursor.close()
+    return beperkings
+
+
+
+def get_evd_by_username(gebruikersnaam):     
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""SELECT * FROM Ervaringsdeskundige WHERE gebruikersnaam = ?""", (gebruikersnaam,) )
+    result = cursor.fetchone()
+    dict_result = dict(result) if not None else {}
+    cursor.close()
+    if "id" in  dict_result:
+     beperkinging = get_evd_beperkinging(result["id"])
+     print(beperkinging)
+     dict_result["beperkinging"] = beperkinging
+     return dict_result
+    else: 
+     return {}
