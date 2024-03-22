@@ -121,9 +121,17 @@ def login_evd_new():
      if user_exist(gebruikersnaam,  wachtwoordEvd):
       evd = get_evd_by_username(gebruikersnaam)
       # problem with the database please hash the password
-      del evd["wachtwoord"]
-      session['evd'] = evd
-      return redirect('/ervaringsdeskundige/onderzoek_overzicht')
+      if evd['status'] == 'nieuw':
+        flash('Account is nog niet goedgekeurd door beheerder')
+        return render_template('login_evd.html')
+      elif evd['status'] == 'afgekeurd':
+        flash('Account is afgekeurd door beheerder')
+        return render_template('login_evd.html')
+      else:
+        del evd["wachtwoord"]
+        session['evd'] = evd
+        return redirect('/ervaringsdeskundige/onderzoek_overzicht')
      else:
+      flash('Foutieve gebruikersnaam/wachtwoord')
       return render_template('login_evd.html')
      

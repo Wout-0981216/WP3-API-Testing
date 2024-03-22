@@ -1,4 +1,4 @@
-from flask import g
+from flask import g, flash
 import sqlite3
 import os
 import datetime
@@ -450,7 +450,10 @@ def user_exist(gebruikersnaam,password):
     cursor = connection.cursor()
     cursor.execute("""SELECT * FROM Ervaringsdeskundige WHERE gebruikersnaam = ? and wachtwoord = ? """, (gebruikersnaam,password,) )
     result = cursor.fetchone()
-    return False if result is None else True
+    if result is None:
+        return False
+    else: 
+        return True
 
 # def get_beperking_by_id(id):
 
