@@ -18,7 +18,7 @@ def is_een_geldige_kandidaat(evd, onderzoek):
     if "beperkinging" in evd: 
      listofberperking = []
      for beperking in evd["beperkinging"]:
-        listofberperking.append(beperking["type_beperking"])
+        listofberperking.append(beperking["id"])
      if onderzoek["doelgroep_beperking"] not in listofberperking:
         return False
     onderzoek_start_date = datetime.strptime(onderzoek["datum_vanaf"], "%Y-%m-%d")
