@@ -197,7 +197,7 @@ def get_aanvragen():
 def get_onderzoeken():
     connection = get_db()
     cursor = connection.cursor()
-    query = "SELECT COUNT(*) FROM Onderzoek WHERE status='nieuwe';"
+    query = "SELECT COUNT(*) FROM Onderzoek WHERE status='nieuw';"
     cursor.execute(query)
     count_onderzoeken = cursor.fetchone()[0]
     cursor.close()
@@ -372,7 +372,7 @@ def deny_inschrijving_status(onderzoek_id):
 def get_new_onderzoeken():
     connection = get_db()
     cursor = connection.cursor()
-    query = ("""SELECT * FROM Onderzoek LEFT JOIN beperking on Onderzoek.doelgroep_beperking = beperking.id WHERE status = 'nieuwe'""")
+    query = ("""SELECT * FROM Onderzoek LEFT JOIN beperking on Onderzoek.doelgroep_beperking = beperking.id WHERE status = 'nieuw'""")
     cursor.execute(query)
     onderzoeken = cursor.fetchall()
     cursor.close()

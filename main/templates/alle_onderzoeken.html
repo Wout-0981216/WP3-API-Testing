@@ -68,7 +68,7 @@
             </form>
           </td>
             <td>
-            {% if alle_onderzoeken['status'] == 'nieuwe' or alle_onderzoeken['status'] == 'afgekeurd'%}
+            {% if alle_onderzoeken['status'] == 'nieuw' or alle_onderzoeken['status'] == 'afgekeurd'%}
             <form method="post" action="{{ url_for('beheerder.confirm_onderzoek_no_redirect', id = alle_onderzoeken['id']) }}">
                 <input type="submit" value="Goedkeuren">
             </form>
