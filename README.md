@@ -4,9 +4,20 @@ In deze applicatie heb je de mogelijkheid om onderzoeksvragen uit te laten voere
 
 # Applicatie starten
 
+**clonen** <br/>
+
 Clone de gitfile
+
+**Virtual envoirment** <br/>
+
 installeer een virtual envoirment
+
+**requirements** <br/>
+
 download de requirements.txt in de virtual envoirment
+
+**Run** <br/>
+
 Navigeer naar de main folder in het project en run daarna ```Python app.py``` nu start de applicatie op.
 
 # Login gegevens
