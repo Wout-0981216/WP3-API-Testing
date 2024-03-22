@@ -10,43 +10,105 @@
     padding: 20px;
     margin-bottom: 20px;
     border-radius: 10px;
-    list-style:none;
-}
+    list-style: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-.list-element span {
+  .list-element span {
     font-size: 18px;
     font-weight: bold;
+  }
+
+  .list-element p {
+    margin-top: 10px;
+  }
+
+  .list-element button {
+    margin-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .col-md-4 {
+    width: 50%;
+    height: 150px;
+    overflow: hidden;
+    float: left;
+    transition: width 0.5s;
+    box-sizing: border-box;
+  }
+
+  .col-md-4:hover {
+    cursor: pointer;
+  }
+
+  .card-header {
+    padding: 10px;
+    background: #FFF;
+    color: #000;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .card-header:hover {
+    background-color: #114FE5;
+    color: #FFF;
+    font-weight: bold;
+  }
+
+  .nav-tabs .nav-link {
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+  }
+  .card-header:first-child {
+    border-radius: 25px;
+    
+}
+h1{
+  margin: 15px 0px;
 }
 
-.list-element p {
-    margin-top: 10px;
-}
-
-.list-element button {
-    margin-top: 10px;
-}
+  /* Media query*/
+  @media (max-width: 768px) {
+    .col-md-4 {
+      width: 100%;
+      float: none;
+    }
+    .list-element button {
+      font-size: 12px;
+    }
+  }
 </style>
 <script>
   var lastResponse = {
-      beschikbaar: null,
-      geregisteered: null,
+    // beschikbaar: null,
+    // geregisteered: null,
+    // afgekeurde: null,
+    // afwachting: null
   };
   var interval;
   var INTERVAL_TIME = 5000;
   const getResearches = (type = 'beschikbaar') => {
     $.ajax({
-        url: `http://127.0.0.1:5000/ervaringsdeskundige/haal_${type}_onderzoek`,
-        method: "GET",
+      url: `http://127.0.0.1:5000/ervaringsdeskundige/haal_onderzoek/${type}`,
+      method: "GET",
     })
       .then((jsonResponse) => {
         if (jsonResponse.length > 0) {
+          console.log(jsonResponse);
           console.log(JSON.stringify(jsonResponse) !== JSON.stringify(lastResponse[type]))
           if (JSON.stringify(jsonResponse) !== JSON.stringify(lastResponse[type])) {
             console.log("response");
             lastResponse[type] = jsonResponse;
+            console.log(lastResponse, lastResponse[type].length)
+            $(`#aantal-${type}-onderzoeken`).text(lastResponse[type].length)
             console.log({ lastResponse });
             let listItems = '';
-            lastResponse[type].forEach((element,index) => {
+            lastResponse[type].forEach((element, index) => {
               let typeButton = type == 'beschikbaar' ? `<button  onclick='deelname(event)'
                             id=onderzoek-id-${element.id}
                             type="button" class="btn btn-primary">Inschrijven</button>
@@ -55,21 +117,21 @@
                             type="button" class="btn btn-danger">Uitschriven</button>
                            `
 
-                        listItems += `<li class='list-element' id='list-element-${element.id}'>
-                            <span>${element.titel} ${index+1} </span>
+              listItems += `<li class='list-element' id='list-element-${element.id}'>
+                            <span><i> ${index + 1} <i/> ${element.titel} </span>
                             <div>
                                 <p>${element.beschrijving}</p>
                             </div>
                             ${typeButton}
                             </li>`
             });
-            $(type == 'beschikbaar' ? '#list-beschikbaar' : '#list-geregisteered').html(listItems);
+            $(`#list-${type}`).html(listItems);
           }
         } else {
-          $("#list").html(`<li>No Research found </li>`);
+          $(`#list-${type}`).html(`<li>No Research found </li>`);
         }
       })
-      .catch((error) => {});
+      .catch((error) => { });
   };
 
   function uitschrijven() {
@@ -138,26 +200,46 @@
     }
   }
   $(document).ready(() => {
-    $("#beschikbaar-href").on("click", () => {
-      console.log("beschikbaar clicked");
-      $("#geregisteered").css({ display: "none" });
-      $("#beschikbaar").css({ display: "block" });
-      clearInterval(interval);
-      interval = setInterval(() => {
-        getResearches();
-      }, INTERVAL_TIME);
-    });
-    $("#geregisteered-href").on("click", () => {
-      console.log("geregisteered clicked");
-      $("#geregisteered").css({ display: "block" });
-      $("#beschikbaar").css({ display: "none" });
-      clearInterval(interval);
-      interval = setInterval(() => {
-        getResearches("geregisteered");
-      }, INTERVAL_TIME);
-    });
+    // $("#beschikbaar-href").on("click", () => {
+    //   console.log("beschikbaar clicked");
+    //   $("#geregisteered").css({ display: "none" });
+    //   $("#beschikbaar").css({ display: "block" });
+    //   clearInterval(interval);
+    //   interval = setInterval(() => {
+    //     getResearches();
+    //   }, INTERVAL_TIME);
+    // });
+    // $("#geregisteered-href").on("click", () => {
+    //   console.log("geregisteered clicked");
+    //   $("#geregisteered").css({ display: "block" });
+    //   $("#beschikbaar").css({ display: "none" });
+    //   clearInterval(interval);
+    //   interval = setInterval(() => {
+    //     getResearches("geregisteered");
+    //   }, INTERVAL_TIME);
+    // });
+    function hideTab(tabsID = []) {
+      for (let i = 0; i < tabsID.length; i++) {
+        $(`#${tabsID[i]}`).css({ display: "none" });
+      }
+    }
 
-    $("#beschikbaar-href").click();
+    const TAB_LIST = ["beschikbaar", "geregisteered", "afgekeurde", "afwachting"];
+    for (let i = 0; i < TAB_LIST.length; i++) {
+      const tab = TAB_LIST[i];
+      $(`#${tab}-href`).on("click", () => {
+        console.log(`#${tab}-href`);
+        $(`#${tab}`).css({ display: "block" });
+        // hIDE ALL OTHER TABES
+        hideTab(TAB_LIST.filter((ele) => tab !== ele));
+        clearInterval(interval);
+        interval = setInterval(() => {
+          getResearches(tab);
+        }, INTERVAL_TIME);
+      });
+
+    }
+    $(`#${TAB_LIST[0]}-href`).click();
   });
 </script>
 
@@ -165,32 +247,100 @@
 
 
 <div class="container-flex">
-  <div class="reserarch-list-container">
-      <h1> Onderzoeken </h1>
-  </a>
+  <h1> Onderzoeken van {{session["evd"]["gebruikersnaam"]}} </h1>
 
-  <ul class="nav nav-tabs" role="tablist">
-      <li class="nav-item">
-          <a href="#beschikbaar" id="beschikbaar-href" role="tab" data-toggle="tab" class="nav-link">
-              Beschikbaar </a>
-      </li>
-      <li class="nav-item">
-          <a href="#geregisteered" id="geregisteered-href" role="tab" data-toggle="tab" class="nav-link">
-              Geregisteered </a>
-      </li>
-  </ul>
-  <div class="tab-content">
+
+
+  <div class="reserarch-list-container">
+
+    <ul class="nav nav-tabs " style="display: grid;grid-template-columns: 35% 35% 35%" role="tablist">
+
+      <div class="col-md-4">
+        <a href="#beschikbaar" id="beschikbaar-href" role="tab" data-toggle="tab" class="nav-link">
+          <div class="card text-white bg-primary mb-3 clickable-card ">
+            <div class="card-header">Goedgekeurd</div>
+            <!-- <div class="card-body">
+              <h5 class="card-title">Aantal Beschikbaar Onderzoeken: <span id="aantal-beschikbaar-onderzoeken">3</span>
+              </h5>
+            </div> -->
+          </div>
+        </a>
+      </div>
+
+      <div class="col-md-4">
+        <a href="#geregisteered" id="geregisteered-href" role="tab" data-toggle="tab" class="nav-link">
+          <div class="card text-white bg-primary mb-3 clickable-card">
+            <div class="card-header">Ingeschreven</div>
+            <!-- <div class="card-body">
+              <h5 class="card-title">Aantal Geregisteered (goedgekeured) onderzoeken: <span
+                  id="aantal-gregisteered-onderzoeken">3</span></h5>
+            </div> -->
+          </div>
+        </a>
+      </div>
+
+
+      <div class="col-md-4">
+        <a href="#afgekeurde" id="afgekeurde-href" role="tab" data-toggle="tab" class="nav-link">
+          <div class="card text-white bg-primary mb-3 clickable-card">
+            <div class="card-header">In Behandeling</div>
+            <!-- <div class="card-body">
+              <h5 class="card-title">Aantal afgekeurde (goedgekeured) onderzoeken: <span
+                  id="aantal-afgekeurde-onderzoeken">3</span></h5>
+            </div> -->
+          </div>
+        </a>
+      </div>
+
+
+
+      
+      <div class="col-md-4">
+        <a href="#afwachting" id="afwachting-href" role="tab" data-toggle="tab" class="nav-link">
+          <div class="card text-white bg-primary mb-3 clickable-card">
+            <div class="card-header">Afwachting</div>
+            <!-- <div class="card-body">
+              <h5 class="card-title">Aantal afwachting (goedgekeured) onderzoeken: <span
+                  id="aantal-afwachting-onderzoeken">3</span></h5>
+            </div> -->
+          </div>
+        </a>
+      </div>
+
+      
+    </ul>
+
+
+    
+    <div class="tab-content">
       <div class="tab-pane active" role="tabpanel" id="beschikbaar">
-          
-          <ul id="list-beschikbaar">
-          </ul>
+        <h3> Beschikbaar </h3>
+
+        <ul id="list-beschikbaar">
+        </ul>
       </div>
       <div class="tab-pane" role="tabpanel" id="geregisteered">
-          <h3> Geregisteered </h3>
-          <ul id="list-geregisteered">
-          </ul>
+        <h3> Geregisteered </h3>
+        <ul id="list-geregisteered">
+        </ul>
       </div>
+
+      <div class="tab-pane" role="tabpanel" id="afgekeurde">
+        <h3> Afgekeurde </h3>
+        <ul id="list-afgekeurde">
+        </ul>
+      </div>
+
+
+      <div class="tab-pane" role="tabpanel" id="afwachting">
+        <h3> Afwachting </h3>
+        <ul id="list-afwachting">
+        </ul>
+      </div> 
+
+
+
+    </div>
   </div>
-</div>
 </div>
 {% endblock %}
