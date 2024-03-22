@@ -9,15 +9,14 @@
             <img class="bi me-2 header-image" src="static/images/Logo.png">
             <span class="fs-4">Accessibility hub</span>
         </a>
-        {% block header %}{% endblock %}
-
-        {% if show_navigation %}
+            {% if request.path not in [url_for('auth.index'), url_for('auth.login_page'), url_for('auth.registration'), url_for('auth.login_beheerder'), url_for('auth.login_evd')] %}
             <nav>
                 <ul class="nav nav-pills">
-                    <li class=""><a href="#" class="nav-link active" aria-current="page">Home</a></li>
-                    <li><a href="{{ url_for('#') }}" class="nav-link" aria-current="page">#</a></li>
+                    {% if request.path not in [url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht')] %}
+                        <li><a href="{{ url_for('admin.admin_page') }}" class="nav-link">Admin</a></li>
+                        {% endif %}
                     <li class="nav-item">
-                        <a href="#">Log uit</a>
+                        <a href="{{ url_for('auth.logout') }}">Log uit</a>
                     </li>
                 </ul>
             </nav>
