@@ -114,6 +114,7 @@ function deelname(event) {
   }
 }
 $(document).ready(() => {
+  getResearches()
   // $("#beschikbaar-href").on("click", () => {
   //   console.log("beschikbaar clicked");
   //   $("#geregisteered").css({ display: "none" });
@@ -143,6 +144,7 @@ $(document).ready(() => {
     const tab = TAB_LIST[i];
     $(`#${tab}-href`).on("click", () => {
       console.log(`#${tab}-href`);
+      getResearches(tab)
       $(`#${tab}`).css({ display: "block" });
       // hIDE ALL OTHER TABES
       hideTab(TAB_LIST.filter((ele) => tab !== ele));
