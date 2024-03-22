@@ -1,9 +1,15 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify, flash
+from flask import Blueprint, render_template, redirect, url_for, jsonify, flash, session
 from database_functions import *
 
 
 beheerder_blueprint = Blueprint('beheerder', __name__)
 
+@beheerder_blueprint.before_request
+def before_beheerder_request():
+    if 'beheerder_id' in session:
+        return
+    flash('U bent niet bevoegd deze pagina te bekijken')
+    return redirect(url_for('auth.index'))
 
 @beheerder_blueprint.route('/beheerder', methods=['GET'])
 def beheerder():
