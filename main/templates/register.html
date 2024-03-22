@@ -102,12 +102,12 @@
                     <input type="text" id="particularities_availability" name="particularities_availability">
                   </div>
                   <div class="form-group">
-                    <label class="form-label" for="disability">Beperking</label>
-                    <select name="disability" id="disability">
-                      {% for beperking_type in beperking_dict %}
-                      <optgroup label="{{ beperking_type[0] }}"> {{ beperking_type[0] }}</optgroup>
+                    <label><b>Beperking(en):</b></label><br>
+                    {% for beperking_type in beperking_dict %}
+                      <label><b> {{ beperking_type[0] }} </b></label><br>
                         {% for beperking in beperking_dict[beperking_type] %}
-                        <option value="{{ beperking[1] }}">{{ beperking[0] }}</option>
+                        <input type="checkbox" id="{{ beperking[0] }}" name="{{ beperking[0] }}" value="{{ beperking[0] }}">
+                        <label for="vehicle1"> {{ beperking[0] }}</label><br>
                         {% endfor %}
                       {% endfor%}
                     </select>

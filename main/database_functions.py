@@ -13,7 +13,7 @@ def get_db():
         db.row_factory = sqlite3.Row
     return db
 
-def insert_ervaringsdeskundige_into_database(form):
+def insert_ervaringsdeskundige_into_database(form, beperkingen):
     voornaam = form.get('firstname')
     achternaam = form.get('lastname')
     postcode = form.get('postcode')
@@ -40,7 +40,6 @@ def insert_ervaringsdeskundige_into_database(form):
     status = 'nieuw'
     beheerder_id = None
     datum_status_update = None
-    beperking = form.get('disability')
     try:
       connection = get_db()
       cursor = connection.cursor()
@@ -67,7 +66,11 @@ def insert_ervaringsdeskundige_into_database(form):
                             """, (gebruikersnaam,))
             id = cursor.fetchone()
             cursor.close()
-            insert_ervaringsdeskundige_beperking_into_database(id[0], beperking)
+            for beperking_type in beperkingen:
+                for beperking in beperkingen[beperking_type]:
+                    if (form.get(str(beperking[0]))) != None:
+                        beperking = form.get(beperking[0])
+                        insert_ervaringsdeskundige_beperking_into_database(id[0], beperking)
             return msg
 
 def insert_ervaringsdeskundige_beperking_into_database(id, beperking):

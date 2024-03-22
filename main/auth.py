@@ -39,7 +39,13 @@ def registration():
 
 @auth_blueprint.route("/registration", methods=['POST'])
 def add_registration():
-    msg = insert_ervaringsdeskundige_into_database(request.form)
+    beperking_typen = select_type_beperkingen_from_database()
+    beperking_dict = {}
+    for beperking_typen in beperking_typen:
+        beperkingen = select_beperking_from_database_by_type(beperking_typen[0])
+        beperking_dict[beperking_typen] = beperkingen
+
+    msg = insert_ervaringsdeskundige_into_database(request.form, beperking_dict)
     flash(msg)
     return redirect(url_for("auth.registration"))
 
