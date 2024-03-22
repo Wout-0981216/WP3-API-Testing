@@ -1,0 +1,79 @@
+.list-element {
+  width: 100%;
+  max-width: 600px;
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  list-style: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list-element span {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.list-element p {
+  margin-top: 10px;
+}
+
+.list-element button {
+  margin-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-md-4 {
+  width: 50%;
+  height: 150px;
+  overflow: hidden;
+  float: left;
+  transition: width 0.5s;
+  box-sizing: border-box;
+}
+
+.col-md-4:hover {
+  cursor: pointer;
+}
+
+.card-header {
+  padding: 10px;
+  background: #FFF;
+  color: #000;
+  text-align: center;
+  font-weight: bold;
+}
+
+.card-header:hover {
+  background-color: #114FE5;
+  color: #FFF;
+  font-weight: bold;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: 0;
+  border: none;
+  border-radius: 0;
+}
+.card-header:first-child {
+  border-radius: 25px;
+  
+}
+h1{
+margin: 15px 0px;
+}
+
+/* Media query*/
+@media (max-width: 768px) {
+  .col-md-4 {
+    width: 100%;
+    float: none;
+  }
+  .list-element button {
+    font-size: 12px;
+  }
+}
