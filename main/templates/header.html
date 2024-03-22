@@ -9,6 +9,8 @@
             <img class="bi me-2 header-image" src="static/images/Logo.png">
             <span class="fs-4">Accessibility hub</span>
         </a>
+        {% block header %}
+        {% endblock %}
             {% if request.path not in [url_for('auth.index'), url_for('auth.login_page'), url_for('auth.registration'), url_for('auth.login_beheerder'), url_for('auth.login_evd'), url_for('auth.login_evd_new')] %}
             <nav>
                 <ul class="nav nav-pills">
