@@ -103,11 +103,9 @@ def get_beperkingen_from_database_by_evd_id(id):
     beperkingen_ids = cursor.fetchall()
     beperkingen = []
     for beperking in beperkingen_ids:
-        print(beperking['beperking_id'])
         cursor.execute('SELECT beperking FROM beperking WHERE id = ?',(beperking['beperking_id'],))
         temp = cursor.fetchone()
         beperkingen.append(temp[0])
-    print(beperkingen)
     cursor.close()
     return beperkingen
 
@@ -234,7 +232,6 @@ def insert_dom_data():
      cursor.execute('''INSERT INTO Onderzoek ("titel", "beschikbaar", "beschrijving", "datum_vanaf", "datum_tot", "type_onderzoek", "locatie", "met_beloning", "doelgroep_leeftijd_van", "doelgroep_leeftijd_tot", "organisatie_id", "status", "datum_status_update", "beheerder_id")
      VALUES ('Nieuw onderzoek', 1, 'Dit is een nieuw onderzoek', '2024-03-07', '2024-03-14', 'Kwalitatief', 'Amsterdam', 1, 18, 60, 1, 'nieuwe', '2024-03-07 12:00:00', 1);''')
      new_category_id = cursor.lastrowid
-     print(new_category_id)
      connection.commit()
      cursor.close()
      return
@@ -443,7 +440,6 @@ def create_beheerder():
     INSERT INTO Beheerder ('gebruikersnaam','wachtwoord','voornaam','achternaam','team','is_admin')
     VALUES (?, ?, ?, ?, ?, ?)
 """, ('admin','admin','admin','admin','admin','1'))
-    print('create_beheerder')
     connection.commit()
     cursor.close()
 
@@ -484,7 +480,6 @@ def get_evd_by_username(gebruikersnaam):
     cursor.close()
     if "id" in  dict_result:
      beperkinging = get_evd_beperkinging(result["id"])
-     print(beperkinging)
      dict_result["beperkinging"] = beperkinging
      return dict_result
     else: 

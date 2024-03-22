@@ -16,7 +16,6 @@ def gereigisteerde_onderzoek_belong_to_evd (onderzoed_id):
    if is_authenticated():
        gergesteerde_onderzoek = get_gere_onderzoek_by_evd_id(session['evd']["id"])
        for go in gergesteerde_onderzoek: 
-          print(go)
           if go["onderzoek_id"] == onderzoed_id: 
             return True
        return False   
@@ -39,7 +38,6 @@ def haal_onderzoek(status):
     # check if status is valie 
     if is_authenticated(): 
      newStatus = 'beschikbaar' if status is None else str(status)
-     print({'newStatus': newStatus, 'condition' : newStatus == 'beschikbaar'})
      if  newStatus == 'beschikbaar':
       beschikbaarOnderzoeks = get_onderzoek( session["evd"],{'beschikbaar':True})
       geregisteeredOnderzoek = get_geregisteered_onderzoek({'ervaringsdeskundige_id':session['evd']["id"] , 'status': 'beschikbaar'})

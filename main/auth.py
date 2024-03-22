@@ -118,7 +118,6 @@ def login_evd():
 def login_evd_new(): 
      gebruikersnaam = request.form['gebruikersnaamEvd']  if request.form is not None and   request.form['gebruikersnaamEvd'] is not None  else  request.json['gebruikersnaamEvd'] if request.json  is not None and request.json['gebruikersnaamEvd']  is not None else None
      wachtwoordEvd = request.form['wachtwoordEvd']  if request.form is not None and  request.form['wachtwoordEvd'] is not None  else  request.json['wachtwoordEvd'] if request.json  is not None and request.json['wachtwoordEvd']  is not None else None
-     print({wachtwoordEvd:wachtwoordEvd, gebruikersnaam: gebruikersnaam})
      if user_exist(gebruikersnaam,  wachtwoordEvd):
       evd = get_evd_by_username(gebruikersnaam)
       # problem with the database please hash the password
