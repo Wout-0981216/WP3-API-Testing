@@ -28,7 +28,7 @@ const getResearches = (type = 'beschikbaar') => {
                           type="button" class="btn btn-primary">Inschrijven</button>
                          ` : `<button  onclick='uitschrijven(event)'
                           id=onderzoek-id-${element.id}
-                          type="button" class="btn btn-danger">Uitschriven</button>
+                          type="button" class="btn btn-danger">Uitschrijven</button>
                          `
 
             listItems += `<li class='list-element' id='list-element-${element.id}'>
