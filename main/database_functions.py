@@ -96,6 +96,20 @@ def select_beperking_from_database_by_type(type):
     cursor.close()
     return beperkingen
 
+def get_beperkingen_from_database_by_evd_id(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute('SELECT beperking_id FROM ervaringsdeskundige_beperking WHERE ervaringsdeskundige_id = ?',(id,))
+    beperkingen_ids = cursor.fetchall()
+    beperkingen = []
+    for beperking in beperkingen_ids:
+        print(beperking['beperking_id'])
+        cursor.execute('SELECT beperking FROM beperking WHERE id = ?',(beperking['beperking_id'],))
+        temp = cursor.fetchone()
+        beperkingen.append(temp[0])
+    print(beperkingen)
+    cursor.close()
+    return beperkingen
 
 def beheerder_login(form):
     connection = get_db()
@@ -204,7 +218,6 @@ def get_evd():
 def get_onderzoek(evd, params = {'beschikbaar': True}):
      connection = get_db()
      cursor = connection.cursor()
-     print(params)
      cursor.execute("SELECT * FROM Onderzoek WHERE status = ?", ("goedgekeurd",))
      onderzoeks = cursor.fetchall()
      cursor.close()

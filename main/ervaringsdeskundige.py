@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request, jsonify
 import json
-from database_functions import get_onderzoek, get_gere_onderzoek_by_evd_id,get_geregisteered_onderzoek, inschrijven_onderzoek, uitschrijven_onderzoek, get_onderzoek_by_id
+from database_functions import *
 from datetime import datetime
 
 
@@ -70,5 +70,8 @@ def uitschrijven_onderzoek_route():
         return jsonify(request.json)
     else: return render_template('login_evd.html')
 
-  
-    
+@ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/account_overzicht', methods=['GET', 'POST'])
+def view_account_details():
+   evd = get_evd_from_database_by_id(session['evd']['id'])
+   beperkingen = get_beperkingen_from_database_by_evd_id(session['evd']['id'])
+   return render_template('ervaringsdeskundige_view_account.html',evd=evd, beperkingen=beperkingen)

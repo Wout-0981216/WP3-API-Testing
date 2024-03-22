@@ -1,0 +1,46 @@
+{% extends 'base.html' %} 
+{% block head %}
+<link href="/static/css/ervaringsdeskundige.css" rel="stylesheet" />
+{% endblock %} 
+
+{% block header %}
+<a href="{{ url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht') }}" class="btn btn-primary mb-3">Terug</a>
+{% endblock %}
+
+{% block content%}
+<div class="container-flex">
+  <h1> Account overzicht {{session["evd"]["gebruikersnaam"]}}</h1>
+  <div class="row note-box">
+    <span class="fw-bold">Voornaam: {{ evd['voornaam'] }}</span>
+    <span class="fw-bold">Achternaam: {{ evd['achternaam'] }}</span>
+    <span class="fw-bold">Postcode: {{ evd['postcode'] }}</span>
+    <span class="fw-bold">Geslacht: {{ evd['geslacht'] }}</span>
+    <span class="fw-bold">Email: {{ evd['email'] }}</span>
+    <span class="fw-bold">Gebruikersnaam: {{ evd['gebruikersnaam'] }}</span>
+    <span class="fw-bold">Telefoonnummer: {{ evd['telefoonnummer'] }}</span>
+    <span class="fw-bold">Geboortedatum: {{ evd['geboortedatum'] }}</span>
+    <span class="fw-bold">Gebruikte_hulpmiddel: {{ evd['gebruikte_hulpmiddel'] }}</span>
+    <span class="fw-bold">Bijzonderheden: {{ evd['bijzonderheden'] }}</span>
+    {%if evd['toezichthouder'] == 1%}
+      <span class="fw-bold">Toezichthouder: Ja</span>
+      <span class="fw-bold">Naam voogd: {{ evd['naam_voogd_of_toezichthouder'] }}</span>
+      <span class="fw-bold">Email voogd: {{ evd['email_adres_voogd'] }}</span>
+      <span class="fw-bold">Telefoonnummer voogd: {{ evd['telefoonnummer_voogd'] }}</span>
+    {% else %}
+    <span class="fw-bold">Toezichthouder: Nee</span>
+    {% endif %}
+    <span class="fw-bold">Voorkeur benadering: {{ evd['voorkeur_benadering'] }}</span>
+    <span class="fw-bold">Type onderzoek: {{ evd['type_onderzoek'] }}</span>
+    <span class="fw-bold">Bijzonderheden beschikbaarheid: {{ evd['bijzonderheden_beschikbaarheid'] }}</span>
+    <span class="fw-bold">Status: {{ evd['status'] }}</span>
+    <span class="fw-bold">Status voor het laatst geüpdate door: {{ evd['beheerder_id'] }}</span>
+    <span class="fw-bold">Datum laatste status update: {{ evd['datum_status_update'] }}</span>
+  </div>
+  <span class="fw-bold">Beperkingen: 
+    {% for beperking in beperkingen %}
+    {{ beperking }},
+    {% endfor %}
+  </span>
+
+</div>
+{% endblock%}
