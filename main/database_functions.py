@@ -232,7 +232,7 @@ def get_onderzoek(evd):
 def get_geregisteered_onderzoek(ervaringsdeskundige_id = -1, status = 'beschikbaar'):
     connection = get_db()
     cursor = connection.cursor()
-    if status != 'beschikbaar':
+    if status != 'beschikbaar' and status != 'alle':
       cursor.execute("""
       SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
       FROM Onderzoek

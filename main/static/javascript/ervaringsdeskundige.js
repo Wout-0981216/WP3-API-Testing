@@ -6,7 +6,7 @@ var lastResponse = {
 };
 var interval;
 var INTERVAL_TIME = 5000;
-const getResearches = (type = 'beschikbaar') => {
+function getResearches (type = 'beschikbaar') {
   $.ajax({
     url: `http://127.0.0.1:5000/ervaringsdeskundige/haal_onderzoek/${type}`,
     method: "GET",
@@ -32,29 +32,37 @@ const getResearches = (type = 'beschikbaar') => {
                           type="button" class="btn btn-danger">Uitschrijven</button>
                          `
 
-            listItems += `<li class='list-element' id='list-element-${element.id}'>
-                          <span><i> ${index + 1} <i/> ${element.titel} </span>
+            listItems += `<li class='list-element' id='list-element-${element.id}'><span><i> ${index + 1} <i/> ${element.titel} </span>
                           <div>
-                              <p>${element.beschrijving}</p>
-                              <p>Beschikbaar van: ${element.datum_vanaf} tot: ${element.datum_tot}</p>
-                              <p>Onderzoekstype: ${element.type_onderzoek}</p>
-                              <p>Locatie: ${element.locatie}</p>
-                              <p>Leeftijds doelgroep: ${element.doelgroep_leeftijd_van}-${element.doelgroep_leeftijd_tot}</p>
-                              <p>Beperking doelgroep: ${element.doelgroep_beperking}</p>
-                              <p>Onderzoek van: ${element.organisatie_id}</p>
-                              <p>Met beloning: ${element.met_beloning}</p>
-                              <p>Beloning(indien van toepassing): ${element.beloning}</p>
-                          </div>
-                          ${typeButton}
-                          </li>`
+                              <p><b>Beschrijving: </b>${element.beschrijving}</p>
+                              <p><b>Beschikbaar van:</b> ${element.datum_vanaf} <b>tot:</b> ${element.datum_tot}</p>
+                              <p><b>Onderzoekstype: </b>${element.type_onderzoek}</p>
+                              <p><b>Locatie: </b>${element.locatie}</p>
+                              <p><b>Leeftijds doelgroep: </b>${element.doelgroep_leeftijd_van}-${element.doelgroep_leeftijd_tot}</p>
+                              <p><b>Beperking doelgroep: </b>${element.doelgroep_beperking}</p>
+                              <p><b>Onderzoek van: </b>${element.organisatie_id}</p>
+                              <p><b>Met beloning: </b>${element.met_beloning}</p>
+                              <p><b>Beloning(indien van toepassing): </b>${element.beloning}</p>
+                              <div id="status_button"><button id="status${element.inschrijving_ervaringsdeskundige_onderzoek_status}"> status: ${element.inschrijving_ervaringsdeskundige_onderzoek_status} </button></div>
+                          </div>${typeButton}</li>`
           });
           $(`#list-${type}`).html(listItems);
+          if(type == "alle") { 
+            $(`*#status_button`).css({'display': "block" });
+            $('*#statusnieuw').css({'background-color': 'yellow'});
+            $('*#statusgoedgekeurd').css({'background-color': 'greenyellow'});
+            $('*#statusafgekeurd').css({'background-color': 'red'});
+        }
+          else { $(`*#status_button`).css({display: "none" })};
+          return
         }
       } else {
         $(`#list-${type}`).html(`<li> Geen onderzoeken gevonden </li>`);
+        return
       }
     })
     .catch((error) => { });
+    return
 };
 
 function uitschrijven(event, type) {
@@ -66,7 +74,8 @@ function uitschrijven(event, type) {
 
     if (type ==  "nieuw"){response = lastResponse.nieuw}
     else if(type == "goedgekeurd"){response = lastResponse.goedgekeurd}
-    else if(type == "afgekeurd"){response = lastResponse.afgekeurd};
+    else if(type == "afgekeurd"){response = lastResponse.afgekeurd}
+    else if(type == "alle"){response=lastResponse.alle}
     
     const clickedResearch = response.filter((element) => {
       if (element.id == id) {
@@ -130,35 +139,18 @@ function deelname(event) {
 }
 $(document).ready(() => {
   getResearches()
-  // $("#beschikbaar-href").on("click", () => {
-  //   console.log("beschikbaar clicked");
-  //   $("#geregisteered").css({ display: "none" });
-  //   $("#beschikbaar").css({ display: "block" });
-  //   clearInterval(interval);
-  //   interval = setInterval(() => {
-  //     getResearches();
-  //   }, INTERVAL_TIME);
-  // });
-  // $("#geregisteered-href").on("click", () => {
-  //   console.log("geregisteered clicked");
-  //   $("#geregisteered").css({ display: "block" });
-  //   $("#beschikbaar").css({ display: "none" });
-  //   clearInterval(interval);
-  //   interval = setInterval(() => {
-  //     getResearches("geregisteered");
-  //   }, INTERVAL_TIME);
-  // });
   function hideTab(tabsID = []) {
     for (let i = 0; i < tabsID.length; i++) {
       $(`#${tabsID[i]}`).css({ display: "none" });
     }
   }
-
-  const TAB_LIST = ["beschikbaar", "goedgekeurd", "nieuw", "afgekeurd"];
+  const TAB_LIST = ["beschikbaar", "goedgekeurd", "nieuw", "afgekeurd", "alle"];
   for (let i = 0; i < TAB_LIST.length; i++) {
     const tab = TAB_LIST[i];
     $(`#${tab}-href`).on("click", () => {
       console.log(`#${tab}-href`);
+      if(tab == "alle") { $(`*#status_button`).css({display: "block" })}
+      else { $(`*#status_button`).css({display: "none" })};
       getResearches(tab)
       $(`#${tab}`).css({ display: "block" });
       // hIDE ALL OTHER TABES
@@ -168,7 +160,5 @@ $(document).ready(() => {
         getResearches(tab);
       }, INTERVAL_TIME);
     });
-
   }
-  $(`#${TAB_LIST[0]}-href`).click();
 });

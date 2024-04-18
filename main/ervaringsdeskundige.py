@@ -30,9 +30,7 @@ def ervaringsdeskundige_onderzoek_overzicht():
 
 @ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/haal_onderzoek/<status>', methods=['GET'])
 def haal_onderzoek(status):
-    # check if status is valie 
-    newStatus = 'beschikbaar' if status is None else str(status)
-    if  newStatus == 'beschikbaar':
+    if  status == 'beschikbaar':
       beschikbaarOnderzoeken = get_onderzoek(session["evd"])
       geregisteeredOnderzoek = get_geregisteered_onderzoek(session['evd']["id"], status)
       # uitsluiten van geregisteeredOnderzoek
@@ -40,7 +38,7 @@ def haal_onderzoek(status):
       result = [obj for obj in beschikbaarOnderzoeken if obj["id"] not in ids_to_exclude]
       return jsonify(result)
     else: 
-      onderzoeken = get_geregisteered_onderzoek(session['evd']["id"], newStatus)
+      onderzoeken = get_geregisteered_onderzoek(session['evd']["id"], status)
       return jsonify(onderzoeken)
 
 @ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/inschrijven_onderzoek', methods=['PUT', 'POST'])

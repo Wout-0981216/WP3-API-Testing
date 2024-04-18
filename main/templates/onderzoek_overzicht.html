@@ -9,16 +9,12 @@
 
   <div class="reserarch-list-container">
 
-    <ul class="nav nav-tabs " style="display: grid;grid-template-columns: 35% 35% 35%" role="tablist">
+    <ul class="nav nav-tabs " style="display: grid;grid-template-columns: 20% 20% 20% 20% 20%" role="tablist">
 
       <div class="col-md-4">
         <a href="#beschikbaar" id="beschikbaar-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card ">
             <div class="card-header">Beschikbare onderzoeken</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal Beschikbaar Onderzoeken: <span id="aantal-beschikbaar-onderzoeken">3</span>
-              </h5>
-            </div> -->
           </div>
         </a>
       </div>
@@ -27,10 +23,6 @@
         <a href="#goedgekeurd" id="goedgekeurd-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card">
             <div class="card-header">Goedgekeurde inschrijvingen</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal Geregisteered (goedgekeured) onderzoeken: <span
-                  id="aantal-gregisteered-onderzoeken">3</span></h5>
-            </div> -->
           </div>
         </a>
       </div>
@@ -39,10 +31,6 @@
         <a href="#nieuw" id="nieuw-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card">
             <div class="card-header">Inschrijvingen in behandeling</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal afgekeurde (goedgekeured) onderzoeken: <span
-                  id="aantal-afgekeurde-onderzoeken">3</span></h5>
-            </div> -->
           </div>
         </a>
       </div>
@@ -51,10 +39,13 @@
         <a href="#afgekeurd" id="afgekeurd-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card">
             <div class="card-header">Afgekeurde inschrijvingen</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal afwachting (goedgekeured) onderzoeken: <span
-                  id="aantal-afwachting-onderzoeken">3</span></h5>
-            </div> -->
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4">
+        <a href="#alle" id="alle-href" role="tab" data-toggle="tab" class="nav-link">
+          <div class="card text-white bg-primary mb-3 clickable-card">
+            <div class="card-header">Alle inschrijvingen</div>
           </div>
         </a>
       </div>
@@ -63,25 +54,31 @@
     <div class="tab-content">
       <div class="tab-pane active" role="tabpanel" id="beschikbaar">
         <h3> Onderzoeken beschikbaar voor inschrijving op basis van uw geslacht, leeftijd, beperking en onderzoeksvoorkeur </h3>
-
-        <ul id="list-beschikbaar">
+        <ul id="list-beschikbaar" class="onderzoek-list">
         </ul>
       </div>
+
       <div class="tab-pane" role="tabpanel" id="goedgekeurd">
         <h3> Inschrijvingen goedgekeurd door een beheerder </h3>
-        <ul id="list-goedgekeurd">
+        <ul id="list-goedgekeurd" class="onderzoek-list">
         </ul>
       </div>
 
       <div class="tab-pane" role="tabpanel" id="nieuw">
         <h3> Inschrijvingen in afwachting van goedkeuring door een beheerder </h3>
-        <ul id="list-nieuw">
+        <ul id="list-nieuw" class="onderzoek-list">
         </ul>
       </div>
 
       <div class="tab-pane" role="tabpanel" id="afgekeurd">
         <h3> Inschrijvingen afgekeurd door een beheerder </h3>
-        <ul id="list-afgekeurd">
+        <ul id="list-afgekeurd" class="onderzoek-list">
+        </ul>
+      </div>
+
+      <div class="tab-pane" role="tabpanel" id="alle">
+        <h3> Alle inschrijvingen </h3>
+        <ul id="list-alle" class="onderzoek-list">
         </ul>
       </div> 
     </div>
