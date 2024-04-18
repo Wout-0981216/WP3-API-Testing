@@ -5,31 +5,71 @@
 {% endblock %}
 
 {% block header %}
-<a href="{{ url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht') }}" class="btn btn-primary mb-3">Terug</a>
+<a href="{{ url_for('ervaringsdeskundige.view_account_details') }}" class="btn btn-primary mb-3">Terug</a>
 {% endblock %}
 
 {% block content%}
 <div class="container">
     <h1 class="mb-4">Accountinformatie aanpassen</h1>
-    <form method="POST" action="{{ url_for('update_account') }}">
+    <form method="post" action="{{ url_for('ervaringsdeskundige.update_account') }}">
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="voornaam">Voornaam:</label>
                     <input type="text" class="form-control" id="voornaam" name="voornaam" value="{{ evd['voornaam'] }}">
                 </div>
-                <!-- Voeg andere formulierinvoervelden toe voor de rest van de accountinformatie -->
-                <!-- Voorbeeld: -->
                 <div class="form-group">
                     <label for="achternaam">Achternaam:</label>
                     <input type="text" class="form-control" id="achternaam" name="achternaam" value="{{ evd['achternaam'] }}">
                 </div>
+                <div>
+                    <label for="postcode">Postcode</label>
+                    <input type="text" class="form-control" id="postcode" name="postcode" value="{{ evd['postcode'] }}">
+                </div>
+                <div>
+                    <label for="geslacht">Geslacht</label>
+                    <select class="form-control" name="Gender" id="geslacht" form="geslacht">
+                        <option value="man" {% if evd['geslacht'] == 'man' %} selected {% endif %}>Man</option>
+                        <option value="vrouw" {% if evd['geslacht'] == 'vrouw' %} selected {% endif %}>Vrouw</option>
+                        <option value="anders" {% if evd['geslacht'] == 'anders' %} selected {% endif %}>Anders</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="gebruikersnaam">Gebruikersnaam</label>
+                    <input type="text" class="form-control" id="gebruikersnaam" name="gebruikersnaam" value="{{ evd['gebruikersnaam'] }}">
+                </div>
+
+                <div>
+                    <label for="telefoonnummer">Telefoonnummer</label>
+                    <input type="text" class="form-control" id="telefoonnummer" name="telefoonnummer" value="{{ evd['telefoonnummer'] }}">
+                </div>
             </div>
             <div class="col-md-6">
-                <!-- Voeg hier andere formulierinvoervelden toe -->
+                <div>
+                    <label for="geboortedatum">Geboortedatum</label>
+                    <input type="text" class="form-control" id="geboortedatum" name="geboortedatum" value="{{ evd['geboortedatum'] }}">
+                </div>
+                <div>
+                    <label for="gebruikte_hulpmiddel">Gebruikt hulpmiddel</label>
+                    <input type="text" class="form-control" id="gebruikte_hulpmiddel" name="gebruikte_hulpmiddel" value="{{ evd['gebruikte_hulpmiddel'] }}">
+                </div>
+                <div>
+                    <label for="bijzonderheden">Bijzonderheden</label>
+                    <input type="text" class="form-control" id="Bijzonderheden" name="Bijzonderheden" value="{{ evd['Bijzonderheden'] }}">
+                </div>
+                <div class="form-control">
+                    <label><b>Beperking(en):</b></label><br>
+                    {% for beperking_type in beperking_dict %}
+                      <label><b> {{ beperking_type[0] }} </b></label><br>
+                        {% for beperking in beperking_dict[beperking_type] %}
+                        <input type="checkbox" id="{{ beperking[0] }}" name="{{ beperking[0] }}" value="{{ beperking[1] }}">
+                        <label for="vehicle1"> {{ beperking[0] }}</label><br>
+                        {% endfor %}
+                      {% endfor%}
+                </div>
             </div>
         </div>
-        <!-- Voeg eventuele andere formulierinvoervelden toe -->
+    <br>
         <button type="submit" class="btn btn-primary">Opslaan</button>
     </form>
 </div>

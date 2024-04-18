@@ -39,8 +39,9 @@
     </span>
         </div>
         </div>
-        <div class="mt-3 spacer">
-            <button class="btn btn-primary">Accountinformatie aanpassen</button>
-        </div>
+    <div class="mt-3 spacer">
+        <button type="button" class="btn btn-primary" onclick="window.location='{{ url_for('ervaringsdeskundige.update_account') }}'">Accountinformatie aanpassen</button>
+    </div>
+
 
 {% endblock%}

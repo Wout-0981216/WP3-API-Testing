@@ -58,6 +58,7 @@ def uitschrijven_onderzoek_route():
         return jsonify(request.json)
     else: return render_template('login_evd.html')
 
+
 @ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/account_overzicht', methods=['GET', 'POST'])
 def view_account_details():
    evd = get_evd_from_database_by_id(session['evd']['id'])
@@ -65,5 +66,26 @@ def view_account_details():
    return render_template('ervaringsdeskundige_view_account.html', evd=evd, beperkingen=beperkingen)
 
 
+@ervaringsdeskundige_blueprint.route("/update_account", methods=['GET'])
+def update_account():
+    evd = get_evd_from_database_by_id(session['evd']['id'])
+    beperkingen = get_beperkingen_from_database_by_evd_id(session['evd']['id'])
+    beperking_typen = select_type_beperkingen_from_database()
+    beperking_dict = {}
+    for beperking_typen in beperking_typen:
+        beperkingen = select_beperking_from_database_by_type(beperking_typen[0])
+        beperking_dict[beperking_typen] = beperkingen
 
+    return render_template('edit_account.html', evd=evd, beperking_dict=beperking_dict, beperkingen=beperkingen)
 
+@ervaringsdeskundige_blueprint.route("/update_account", methods=['POST'])
+def process_update_account():
+    beperking_typen = select_type_beperkingen_from_database()
+    beperking_dict = {}
+    for beperking_typen in beperking_typen:
+        beperkingen = select_beperking_from_database_by_type(beperking_typen[0])
+        beperking_dict[beperking_typen] = beperkingen
+
+    msg = update_ervaringsdeskundige_in_database(request.form, beperking_dict)
+    flash(msg)
+    return redirect(url_for("auth.registration"))

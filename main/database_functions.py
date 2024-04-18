@@ -488,3 +488,67 @@ def get_evd_by_username(gebruikersnaam):
     else: 
      return {}
 
+
+def update_ervaringsdeskundige_in_database(form, beperkingen):
+    id = form.get('ervaringsdeskundige_id')  # Dit moet de id van de ervaringsdeskundige zijn die je wilt bijwerken
+    voornaam = form.get('firstname')
+    achternaam = form.get('lastname')
+    postcode = form.get('postcode')
+    geslacht = form.get('sex')
+    email = form.get('email')
+    gebruikersnaam = form.get('username')
+    wachtwoord = form.get('password')
+    telefoonnummer = form.get('phonenumber')
+    geboortedatum = form.get('birthdate')
+    gebruikte_hulpmiddel = form.get('used_accessory')
+    bijzonderheden = form.get('particularities')
+    toezichthouder = int(form.get('guardian'))
+    if toezichthouder == 1:
+        naam_voogd_of_toezichthouder = form.get('name_guardian')
+        email_adres_voogd = form.get('email_guardian')
+        telefoonnummer_voogd = form.get('phonenumber_guardian')
+    else:
+        naam_voogd_of_toezichthouder = None
+        email_adres_voogd = None
+        telefoonnummer_voogd = None
+    voorkeur_benadering = form.get('contact_preference')
+    type_onderzoek = form.get('research_type')
+    bijzonderheden_beschikbaarheid = form.get('particularities_availability')
+    status = 'nieuw'
+    beheerder_id = None
+    datum_status_update = None
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        cursor.execute("""
+                        UPDATE Ervaringsdeskundige 
+                        SET voornaam=?, achternaam=?, postcode=?, geslacht=?, email=?, gebruikersnaam=?, wachtwoord=?, telefoonnummer=?,
+                        geboortedatum=?, gebruikte_hulpmiddel=?, bijzonderheden=?, toezichthouder=?, naam_voogd_of_toezichthouder=?, 
+                        email_adres_voogd=?, telefoonnummer_voogd=?, voorkeur_benadering=?, type_onderzoek=?, 
+                        bijzonderheden_beschikbaarheid=?, status=?, beheerder_id=?, datum_status_update=? 
+                        WHERE id=?
+                        """, (voornaam, achternaam, postcode, geslacht, email, gebruikersnaam, wachtwoord, telefoonnummer,
+                              geboortedatum, gebruikte_hulpmiddel, bijzonderheden, toezichthouder, naam_voogd_of_toezichthouder,
+                              email_adres_voogd, telefoonnummer_voogd, voorkeur_benadering, type_onderzoek,
+                              bijzonderheden_beschikbaarheid, status, beheerder_id, datum_status_update, id))
+        connection.commit()
+        msg = "Account updated"
+    except Exception as e:
+        print(f"Error: {e}")
+        connection.rollback()
+        msg = f"Error in the UPDATE: {e}"
+    finally:
+        if connection:
+            cursor.close()
+            connection = get_db()
+            cursor = connection.cursor()
+            cursor.execute("""
+                            DELETE FROM ErvaringsdeskundigeBeperking WHERE ervaringsdeskundige_id=?
+                            """, (id,))
+            for beperking_type in beperkingen:
+                for beperking in beperkingen[beperking_type]:
+                    if (form.get(str(beperking[0]))) != None:
+                        beperking = form.get(beperking[0])
+                        insert_ervaringsdeskundige_beperking_into_database(id, beperking)
+            cursor.close()
+            return msg
