@@ -51,11 +51,11 @@ def insert_ervaringsdeskundige_into_database(form, beperkingen):
                           toezichthouder,naam_voogd_of_toezichthouder,email_adres_voogd,telefoonnummer_voogd,voorkeur_benadering,type_onderzoek,bijzonderheden_beschikbaarheid,
                           status,beheerder_id,datum_status_update,))
       connection.commit()
-      msg = "Account added"
+      msg = "Your account has been created, it still has to be reviewed and confirmed by an admin before you will be able to log in!"
     except Exception as e:
         print(f"Error: {e}")
         connection.rollback()
-        msg = f"Error in the INSERT: {e}"
+        msg = f"There was a problem with creating your account, please try again."
     finally:
         if connection:
             cursor.close()
@@ -213,46 +213,39 @@ def get_evd():
     return count_evd
 
 
-def get_onderzoek(evd, params = {'beschikbaar': True}):
+def get_onderzoek(evd):
      connection = get_db()
      cursor = connection.cursor()
      cursor.execute("SELECT * FROM Onderzoek WHERE status = ?", ("goedgekeurd",))
-     onderzoeks = cursor.fetchall()
+     onderzoeken = cursor.fetchall()
      cursor.close()
-     geldige_onderzoeks = []
-     for onderzoek in onderzoeks:
+     geldige_onderzoeken = []
+     for onderzoek in onderzoeken:
         dict_onderzoek = dict(onderzoek)
         if is_een_geldige_kandidaat(evd,dict_onderzoek):
-            geldige_onderzoeks.append(dict_onderzoek)
-     return geldige_onderzoeks
-# TO DO -remove alleen voor test
-def insert_dom_data():
-     connection = get_db()
-     cursor = connection.cursor()
-     cursor.execute('''INSERT INTO Onderzoek ("titel", "beschikbaar", "beschrijving", "datum_vanaf", "datum_tot", "type_onderzoek", "locatie", "met_beloning", "doelgroep_leeftijd_van", "doelgroep_leeftijd_tot", "organisatie_id", "status", "datum_status_update", "beheerder_id")
-     VALUES ('Nieuw onderzoek', 1, 'Dit is een nieuw onderzoek', '2024-03-07', '2024-03-14', 'Kwalitatief', 'Amsterdam', 1, 18, 60, 1, 'nieuwe', '2024-03-07 12:00:00', 1);''')
-     new_category_id = cursor.lastrowid
-     connection.commit()
-     cursor.close()
-     return
+            dict_onderzoek["doelgroep_beperking"] = get_beperking_by_id(dict_onderzoek["doelgroep_beperking"])
+            dict_onderzoek["organisatie_id"] = get_organisation_name_by_id(dict_onderzoek["organisatie_id"])
+            dict_onderzoek["met_beloning"] = "Ja" if(dict_onderzoek["met_beloning"]) == 1 else "Nee"
+            geldige_onderzoeken.append(dict_onderzoek)
+     return geldige_onderzoeken
  
-def get_geregisteered_onderzoek(params = {'ervaringsdeskundige_id': -1, 'status': 'beschikbaar'}):
+def get_geregisteered_onderzoek(ervaringsdeskundige_id = -1, status = 'beschikbaar'):
     connection = get_db()
     cursor = connection.cursor()
-    if params['status'] != 'beschikbaar':
+    if status != 'beschikbaar':
       cursor.execute("""
       SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
       FROM Onderzoek
       INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
       WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ? and Inschrijving_ervaringsdeskundige_onderzoek.status = ?
-      """, ((params['ervaringsdeskundige_id'],params['status'],)) )
+      """, (ervaringsdeskundige_id,status,))
     else: 
       cursor.execute("""
       SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
       FROM Onderzoek
       INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
       WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ?
-      """, ((params['ervaringsdeskundige_id'],)))
+      """, (ervaringsdeskundige_id,))
     geregisteeredOnderzoeks = cursor.fetchall()
     cursor.close()
     geregisteeredOnderzoeks_as_dicts = [dict(row) for row in geregisteeredOnderzoeks]
@@ -472,9 +465,23 @@ def get_evd_beperkinging(id):
     cursor.close()
     return beperkings
 
+def get_beperking_by_id(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""SELECT beperking FROM Beperking WHERE id = ?""", (id,))
+    result = cursor.fetchone()
+    cursor.close()
+    return result[0]
 
+def get_organisation_name_by_id(id):
+    connection = get_db()
+    cursor = connection.cursor()
+    cursor.execute("""SELECT naam FROM Organisatie WHERE id = ?""", (id,))
+    result = cursor.fetchone()
+    cursor.close()
+    return result[0]
 
-def get_evd_by_username(gebruikersnaam):     
+def get_evd_by_username(gebruikersnaam):
     connection = get_db()
     cursor = connection.cursor()
     cursor.execute("""SELECT * FROM Ervaringsdeskundige WHERE gebruikersnaam = ?""", (gebruikersnaam,) )

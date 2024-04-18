@@ -14,7 +14,7 @@ const getResearches = (type = 'beschikbaar') => {
     .then((jsonResponse) => {
       if (jsonResponse.length > 0) {
         console.log(jsonResponse);
-        console.log(JSON.stringify(jsonResponse) !== JSON.stringify(lastResponse[type]))
+        console.log(JSON.stringify(jsonResponse) == JSON.stringify(lastResponse[type]))
         if (JSON.stringify(jsonResponse) !== JSON.stringify(lastResponse[type])) {
           console.log("response");
           lastResponse[type] = jsonResponse;
@@ -22,11 +22,12 @@ const getResearches = (type = 'beschikbaar') => {
           $(`#aantal-${type}-onderzoeken`).text(lastResponse[type].length)
           console.log({ lastResponse });
           let listItems = '';
+          researchtype = type;
           lastResponse[type].forEach((element, index) => {
             let typeButton = type == 'beschikbaar' ? `<button  onclick='deelname(event)'
                           id=onderzoek-id-${element.id}
                           type="button" class="btn btn-primary">Inschrijven</button>
-                         ` : `<button  onclick='uitschrijven(event)'
+                         ` : `<button  onclick='uitschrijven(event, researchtype)'
                           id=onderzoek-id-${element.id}
                           type="button" class="btn btn-danger">Uitschrijven</button>
                          `
@@ -35,6 +36,14 @@ const getResearches = (type = 'beschikbaar') => {
                           <span><i> ${index + 1} <i/> ${element.titel} </span>
                           <div>
                               <p>${element.beschrijving}</p>
+                              <p>Beschikbaar van: ${element.datum_vanaf} tot: ${element.datum_tot}</p>
+                              <p>Onderzoekstype: ${element.type_onderzoek}</p>
+                              <p>Locatie: ${element.locatie}</p>
+                              <p>Leeftijds doelgroep: ${element.doelgroep_leeftijd_van}-${element.doelgroep_leeftijd_tot}</p>
+                              <p>Beperking doelgroep: ${element.doelgroep_beperking}</p>
+                              <p>Onderzoek van: ${element.organisatie_id}</p>
+                              <p>Met beloning: ${element.met_beloning}</p>
+                              <p>Beloning(indien van toepassing): ${element.beloning}</p>
                           </div>
                           ${typeButton}
                           </li>`
@@ -42,24 +51,30 @@ const getResearches = (type = 'beschikbaar') => {
           $(`#list-${type}`).html(listItems);
         }
       } else {
-        $(`#list-${type}`).html(`<li>No Research found </li>`);
+        $(`#list-${type}`).html(`<li> Geen onderzoeken gevonden </li>`);
       }
     })
     .catch((error) => { });
 };
 
-function uitschrijven() {
-  const resultConfirm = confirm("Bent u zeker! ");
+function uitschrijven(event, type) {
+  const resultConfirm = confirm("Weet u het zeker? ");
   console.log({ resultConfirm });
   if (event && event.target) {
     const id = event.target.id.replace('onderzoek-id-', '');
-    console.log(id);
-    const clickedResearch = lastResponse.geregisteered.filter((element) => {
+    console.log(type, event);
+
+    if (type ==  "nieuw"){response = lastResponse.nieuw}
+    else if(type == "goedgekeurd"){response = lastResponse.goedgekeurd}
+    else if(type == "afgekeurd"){response = lastResponse.afgekeurd};
+    
+    const clickedResearch = response.filter((element) => {
       if (element.id == id) {
         return true;
       }
       return false;
     });
+
     console.log({ clickedResearch });
     $.ajax({
       url: "http://127.0.0.1:5000/ervaringsdeskundige/uitschrijven_onderzoek",
@@ -139,7 +154,7 @@ $(document).ready(() => {
     }
   }
 
-  const TAB_LIST = ["beschikbaar", "geregisteered", "afgekeurde", "afwachting"];
+  const TAB_LIST = ["beschikbaar", "goedgekeurd", "nieuw", "afgekeurd"];
   for (let i = 0; i < TAB_LIST.length; i++) {
     const tab = TAB_LIST[i];
     $(`#${tab}-href`).on("click", () => {
