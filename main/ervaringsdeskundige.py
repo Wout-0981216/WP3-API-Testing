@@ -62,4 +62,8 @@ def uitschrijven_onderzoek_route():
 def view_account_details():
    evd = get_evd_from_database_by_id(session['evd']['id'])
    beperkingen = get_beperkingen_from_database_by_evd_id(session['evd']['id'])
-   return render_template('ervaringsdeskundige_view_account.html',evd=evd, beperkingen=beperkingen)
+   return render_template('ervaringsdeskundige_view_account.html', evd=evd, beperkingen=beperkingen)
+
+
+
+

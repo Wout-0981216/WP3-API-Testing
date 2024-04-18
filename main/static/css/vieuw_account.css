@@ -1,0 +1,18 @@
+.container-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+.note-box {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.spacer {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

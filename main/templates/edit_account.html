@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<link href="/static/css/vieuw_account.css" rel="stylesheet" />
+{% endblock %}
+
+{% block header %}
+<a href="{{ url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht') }}" class="btn btn-primary mb-3">Terug</a>
+{% endblock %}
+
+{% block content%}
+<div class="container">
+    <h1 class="mb-4">Accountinformatie aanpassen</h1>
+    <form method="POST" action="{{ url_for('update_account') }}">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="voornaam">Voornaam:</label>
+                    <input type="text" class="form-control" id="voornaam" name="voornaam" value="{{ evd['voornaam'] }}">
+                </div>
+                <!-- Voeg andere formulierinvoervelden toe voor de rest van de accountinformatie -->
+                <!-- Voorbeeld: -->
+                <div class="form-group">
+                    <label for="achternaam">Achternaam:</label>
+                    <input type="text" class="form-control" id="achternaam" name="achternaam" value="{{ evd['achternaam'] }}">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Voeg hier andere formulierinvoervelden toe -->
+            </div>
+        </div>
+        <!-- Voeg eventuele andere formulierinvoervelden toe -->
+        <button type="submit" class="btn btn-primary">Opslaan</button>
+    </form>
+</div>
+{% endblock %}
