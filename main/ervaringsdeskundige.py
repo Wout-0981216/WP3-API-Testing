@@ -79,13 +79,19 @@ def update_account():
     return render_template('edit_account.html', evd=evd, beperking_dict=beperking_dict, beperkingen=beperkingen)
 
 @ervaringsdeskundige_blueprint.route("/update_account", methods=['POST'])
-def process_update_account():
-    beperking_typen = select_type_beperkingen_from_database()
-    beperking_dict = {}
-    for beperking_typen in beperking_typen:
-        beperkingen = select_beperking_from_database_by_type(beperking_typen[0])
-        beperking_dict[beperking_typen] = beperkingen
+def update_account_post():
+    voornaam = request.form.get('voornaam')
+    achternaam = request.form.get('achternaam')
+    postcode = request.form.get('postcode')
+    geslacht = request.form.get('Gender')
+    gebruikersnaam = request.form.get('gebruikersnaam')
+    telefoonnummer = request.form.get('telefoonnummer')
+    geboortedatum = request.form.get('geboortedatum')
+    gebruikte_hulpmiddel = request.form.get('gebruikte_hulpmiddel')
+    bijzonderheden = request.form.get('Bijzonderheden')
 
-    msg = update_ervaringsdeskundige_in_database(request.form, beperking_dict)
+    msg = update_account_in_database(voornaam, achternaam, postcode, geslacht, gebruikersnaam, telefoonnummer, geboortedatum, gebruikte_hulpmiddel, bijzonderheden)
+
     flash(msg)
-    return redirect(url_for("auth.registration"))
+
+    return redirect(url_for("ervaringsdeskundige.view_account_details"))
