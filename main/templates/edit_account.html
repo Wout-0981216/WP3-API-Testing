@@ -43,9 +43,7 @@
                     <label for="telefoonnummer">Telefoonnummer</label>
                     <input type="text" class="form-control" id="telefoonnummer" name="telefoonnummer" value="{{ evd['telefoonnummer'] }}">
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div>
+            <div>
                     <label for="geboortedatum">Geboortedatum</label>
                     <input type="text" class="form-control" id="geboortedatum" name="geboortedatum" value="{{ evd['geboortedatum'] }}">
                 </div>
@@ -57,13 +55,16 @@
                     <label for="bijzonderheden">Bijzonderheden</label>
                     <input type="text" class="form-control" id="Bijzonderheden" name="Bijzonderheden" value="{{ evd['Bijzonderheden'] }}">
                 </div>
-                <div class="form-control">
-                    <label><b>Beperking(en):</b></label><br>
+            </div>
+            <div class="col-md-6">
+                <div>
+                    <label> Beperking(en):</label><br>
+                <br>
                     {% for beperking_type in beperking_dict %}
                       <label><b> {{ beperking_type[0] }} </b></label><br>
                         {% for beperking in beperking_dict[beperking_type] %}
-                        <input type="checkbox" id="{{ beperking[0] }}" name="{{ beperking[0] }}" value="{{ beperking[1] }}">
-                        <label for="vehicle1"> {{ beperking[0] }}</label><br>
+                        <input type="checkbox"  id="{{ beperking[0] }}" name="{{ beperking[0] }}" value="{{ beperking[1] }}">
+                        <label> {{ beperking[0] }}</label><br>
                         {% endfor %}
                       {% endfor%}
                 </div>
