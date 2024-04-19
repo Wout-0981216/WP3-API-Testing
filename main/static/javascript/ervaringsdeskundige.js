@@ -52,7 +52,7 @@ function getResearches (type = 'beschikbaar') {
             $('*#statusnieuw').css({'background-color': 'yellow'});
             $('*#statusgoedgekeurd').css({'background-color': 'greenyellow'});
             $('*#statusafgekeurd').css({'background-color': 'red'});
-        }
+          }
           else { $(`*#status_button`).css({display: "none" })};
           return
         }
@@ -138,13 +138,8 @@ function deelname(event) {
   }
 }
 $(document).ready(() => {
-  getResearches()
-  function hideTab(tabsID = []) {
-    for (let i = 0; i < tabsID.length; i++) {
-      $(`#${tabsID[i]}`).css({ display: "none" });
-    }
-  }
   const TAB_LIST = ["beschikbaar", "goedgekeurd", "nieuw", "afgekeurd", "alle"];
+  hideTab(TAB_LIST)
   for (let i = 0; i < TAB_LIST.length; i++) {
     const tab = TAB_LIST[i];
     $(`#${tab}-href`).on("click", () => {
@@ -162,3 +157,8 @@ $(document).ready(() => {
     });
   }
 });
+function hideTab(tabsID = []) {
+  for (let i = 0; i < tabsID.length; i++) {
+    $(`#${tabsID[i]}`).css({ display: "none" });
+  }
+}

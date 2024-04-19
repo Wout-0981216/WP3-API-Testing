@@ -7,6 +7,7 @@
 .list-element {
   width: fit-content;
   background-color: #f2f2f2;
+  margin-top: 20px;
   padding: 20px;
   border-radius: 10px;
   list-style: none;
