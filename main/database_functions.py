@@ -246,9 +246,16 @@ def get_geregisteered_onderzoek(ervaringsdeskundige_id = -1, status = 'beschikba
       INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
       WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ?
       """, (ervaringsdeskundige_id,))
-    geregisteeredOnderzoeks = cursor.fetchall()
+    onderzoeken = cursor.fetchall()
     cursor.close()
-    geregisteeredOnderzoeks_as_dicts = [dict(row) for row in geregisteeredOnderzoeks]
+    geregisteeredOnderzoeks_as_dicts = []
+    for onderzoek in onderzoeken:
+        dict_onderzoek = dict(onderzoek)
+        dict_onderzoek["doelgroep_beperking"] = get_beperking_by_id(dict_onderzoek["doelgroep_beperking"])
+        dict_onderzoek["organisatie_id"] = get_organisation_name_by_id(dict_onderzoek["organisatie_id"])
+        dict_onderzoek["met_beloning"] = "Ja" if(dict_onderzoek["met_beloning"]) == 1 else "Nee"
+        geregisteeredOnderzoeks_as_dicts.append(dict_onderzoek)
+    
     return geregisteeredOnderzoeks_as_dicts
     
     
