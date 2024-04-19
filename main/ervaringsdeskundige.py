@@ -14,7 +14,7 @@ def before_ervaringsdeskundige_request():
     flash('U bent niet bevoegd deze pagina te bekijken')
     return redirect(url_for('auth.index'))
 
-def gereigisteerde_onderzoek_belong_to_evd (onderzoed_id):
+def geregisteerde_onderzoek_belong_to_evd (onderzoed_id):
     gergesteerde_onderzoek = get_gere_onderzoek_by_evd_id(session['evd']["id"])
     for go in gergesteerde_onderzoek: 
         if go["onderzoek_id"] == onderzoed_id: 
@@ -30,30 +30,25 @@ def ervaringsdeskundige_onderzoek_overzicht():
 
 @ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/haal_onderzoek/<status>', methods=['GET'])
 def haal_onderzoek(status):
-    # check if status is valie 
-    newStatus = 'beschikbaar' if status is None else str(status)
-    if  newStatus == 'beschikbaar':
-      beschikbaarOnderzoeks = get_onderzoek( session["evd"],{'beschikbaar':True})
-      geregisteeredOnderzoek = get_geregisteered_onderzoek({'ervaringsdeskundige_id':session['evd']["id"] , 'status': 'beschikbaar'})
+    if  status == 'beschikbaar':
+      beschikbaarOnderzoeken = get_onderzoek(session["evd"])
+      geregisteeredOnderzoek = get_geregisteered_onderzoek(session['evd']["id"], status)
       # uitsluiten van geregisteeredOnderzoek
       ids_to_exclude = {obj["id"] for obj in geregisteeredOnderzoek}
-      result = [obj for obj in beschikbaarOnderzoeks if obj["id"] not in ids_to_exclude]
+      result = [obj for obj in beschikbaarOnderzoeken if obj["id"] not in ids_to_exclude]
       return jsonify(result)
     else: 
-      onderzoeken = get_geregisteered_onderzoek({'ervaringsdeskundige_id':session['evd']["id"], 'status': newStatus})
+      onderzoeken = get_geregisteered_onderzoek(session['evd']["id"], status)
       return jsonify(onderzoeken)
 
 @ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/inschrijven_onderzoek', methods=['PUT', 'POST'])
 def inschrijven_onderzoek_route():
-    # TO DO get beheereder_id 
-    # TO DO implementeer ervaringsdeskundige AUTH en beheereder
-    inschrijven_onderzoek(session['evd']["id"], request.json["id"], 1, 'nieuw', datetime.now() )
+    inschrijven_onderzoek(session['evd']["id"], request.json["id"], None, 'nieuw', None )
     return jsonify(request.json)
 
 @ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/uitschrijven_onderzoek', methods=['PUT', 'POST'])
 def uitschrijven_onderzoek_route():
-    # check if the evd has access to the registed resarch
-    if gereigisteerde_onderzoek_belong_to_evd(request.json['id']):  
+    if geregisteerde_onderzoek_belong_to_evd(request.json['id']):  
         uitschrijven_onderzoek(request.json['id'])
         return jsonify(request.json)
     else: return render_template('login_evd.html')

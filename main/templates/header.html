@@ -11,9 +11,26 @@
         </a>
         {% block header %}
         {% endblock %}
-            {% if request.path not in [url_for('auth.index'), url_for('auth.login_page'), url_for('auth.registration'), url_for('auth.login_beheerder'), url_for('auth.login_evd'), url_for('auth.login_evd_new')] %}
+        {% if request.path not in [url_for('auth.index'), url_for('auth.login_page'), url_for('auth.registration'), url_for('auth.login_beheerder'), url_for('auth.login_evd'), url_for('auth.login_evd_new')] %}
             <nav>
                 <ul class="nav nav-pills">
+                    {% if request.path not in [url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht'), url_for('ervaringsdeskundige.view_account_details')] %}
+                        <li><a href="{{ url_for('admin.admin_page') }}" class="nav-link">Admin</a></li>
+                    {% endif %}
+                    {% if request.path in [url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht')]%}
+                    <li class="nav-item">
+                        <a href="{{ url_for('ervaringsdeskundige.view_account_details') }}" class="btn btn-primary mb-3">Account overzicht</a>
+                    </li>
+                    {% endif %}
+                    {% if request.path in [url_for('ervaringsdeskundige.view_account_details')]%}
+                    <li class="nav-item">
+                        <a href="{{ url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht') }}" class="btn btn-primary mb-3">Terug</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('auth.logout') }}">Log uit</a>
+                    </li>
+                </ul>
                     {% if request.path not in [url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht')] %}
         <li class="nav-item">
             <div class="mr-10">

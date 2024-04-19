@@ -3,103 +3,84 @@
 <script src="/static/javascript/ervaringsdeskundige.js"></script>
 {% endblock %}
 
-{% block header %}
-<a href="{{ url_for('ervaringsdeskundige.view_account_details') }}" class="btn btn-primary mb-3">Account overzicht</a>
-{% endblock %}
-
 {% block content %}
 <div class="container-flex">
   <h1> Onderzoeken van {{session["evd"]["gebruikersnaam"]}}</h1>
 
   <div class="reserarch-list-container">
 
-    <ul class="nav nav-tabs " style="display: grid;grid-template-columns: 35% 35% 35%" role="tablist">
+    <ul class="nav nav-tabs " style="display: grid;grid-template-columns: 20% 20% 20% 20% 20%" role="tablist">
 
       <div class="col-md-4">
         <a href="#beschikbaar" id="beschikbaar-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card ">
-            <div class="card-header">Beschikbaar</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal Beschikbaar Onderzoeken: <span id="aantal-beschikbaar-onderzoeken">3</span>
-              </h5>
-            </div> -->
+            <div class="card-header">Beschikbare onderzoeken</div>
           </div>
         </a>
       </div>
 
       <div class="col-md-4">
-        <a href="#geregisteered" id="geregisteered-href" role="tab" data-toggle="tab" class="nav-link">
+        <a href="#goedgekeurd" id="goedgekeurd-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card">
-            <div class="card-header">Ingeschreven</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal Geregisteered (goedgekeured) onderzoeken: <span
-                  id="aantal-gregisteered-onderzoeken">3</span></h5>
-            </div> -->
+            <div class="card-header">Goedgekeurde inschrijvingen</div>
           </div>
         </a>
       </div>
-
 
       <div class="col-md-4">
-        <a href="#afgekeurde" id="afgekeurde-href" role="tab" data-toggle="tab" class="nav-link">
+        <a href="#nieuw" id="nieuw-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card">
-            <div class="card-header">In Behandeling</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal afgekeurde (goedgekeured) onderzoeken: <span
-                  id="aantal-afgekeurde-onderzoeken">3</span></h5>
-            </div> -->
+            <div class="card-header">Inschrijvingen in behandeling</div>
           </div>
         </a>
       </div>
 
-
-
-      
       <div class="col-md-4">
-        <a href="#afwachting" id="afwachting-href" role="tab" data-toggle="tab" class="nav-link">
+        <a href="#afgekeurd" id="afgekeurd-href" role="tab" data-toggle="tab" class="nav-link">
           <div class="card text-white bg-primary mb-3 clickable-card">
-            <div class="card-header">Afwachting</div>
-            <!-- <div class="card-body">
-              <h5 class="card-title">Aantal afwachting (goedgekeured) onderzoeken: <span
-                  id="aantal-afwachting-onderzoeken">3</span></h5>
-            </div> -->
+            <div class="card-header">Afgekeurde inschrijvingen</div>
           </div>
         </a>
       </div>
-
-      
+      <div class="col-md-4">
+        <a href="#alle" id="alle-href" role="tab" data-toggle="tab" class="nav-link">
+          <div class="card text-white bg-primary mb-3 clickable-card">
+            <div class="card-header">Alle inschrijvingen</div>
+          </div>
+        </a>
+      </div>
     </ul>
 
-
-    
     <div class="tab-content">
       <div class="tab-pane active" role="tabpanel" id="beschikbaar">
-        <h3> Beschikbaar </h3>
-
-        <ul id="list-beschikbaar">
-        </ul>
-      </div>
-      <div class="tab-pane" role="tabpanel" id="geregisteered">
-        <h3> Geregisteered </h3>
-        <ul id="list-geregisteered">
+        <h3> Onderzoeken beschikbaar voor inschrijving op basis van uw geslacht, leeftijd, beperking en onderzoeksvoorkeur </h3>
+        <ul id="list-beschikbaar" class="onderzoek-list">
         </ul>
       </div>
 
-      <div class="tab-pane" role="tabpanel" id="afgekeurde">
-        <h3> Afgekeurde </h3>
-        <ul id="list-afgekeurde">
+      <div class="tab-pane" role="tabpanel" id="goedgekeurd">
+        <h3> Inschrijvingen goedgekeurd door een beheerder </h3>
+        <ul id="list-goedgekeurd" class="onderzoek-list">
         </ul>
       </div>
 
+      <div class="tab-pane" role="tabpanel" id="nieuw">
+        <h3> Inschrijvingen in afwachting van goedkeuring door een beheerder </h3>
+        <ul id="list-nieuw" class="onderzoek-list">
+        </ul>
+      </div>
 
-      <div class="tab-pane" role="tabpanel" id="afwachting">
-        <h3> Afwachting </h3>
-        <ul id="list-afwachting">
+      <div class="tab-pane" role="tabpanel" id="afgekeurd">
+        <h3> Inschrijvingen afgekeurd door een beheerder </h3>
+        <ul id="list-afgekeurd" class="onderzoek-list">
+        </ul>
+      </div>
+
+      <div class="tab-pane" role="tabpanel" id="alle">
+        <h3> Alle inschrijvingen </h3>
+        <ul id="list-alle" class="onderzoek-list">
         </ul>
       </div> 
-
-
-
     </div>
   </div>
 </div>

@@ -1,14 +1,18 @@
+.onderzoek-list {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 40px;
+}
+
 .list-element {
-  width: 100%;
-  max-width: 600px;
+  width: fit-content;
   background-color: #f2f2f2;
   padding: 20px;
-  margin-bottom: 20px;
   border-radius: 10px;
   list-style: none;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: pre-line;
 }
 
 .list-element span {
@@ -17,22 +21,26 @@
 }
 
 .list-element p {
-  margin-top: 10px;
+  margin-bottom: 0;
+  padding: 0;
+  line-height: 1;
 }
 
 .list-element button {
-  margin-top: 10px;
+  margin: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .col-md-4 {
-  width: 50%;
-  height: 150px;
+  width: fit-content;
+  max-width: 200px;
+  height: fit-content;
+  max-height: 100px;
   overflow: hidden;
   float: left;
-  transition: width 0.5s;
+  transition: 0.5s;
   box-sizing: border-box;
 }
 
@@ -61,7 +69,6 @@
 }
 .card-header:first-child {
   border-radius: 25px;
-  
 }
 h1{
 margin: 15px 0px;

@@ -3,10 +3,6 @@
 <link href="/static/css/vieuw_account.css" rel="stylesheet" />
 {% endblock %} 
 
-{% block header %}
-<a href="{{ url_for('ervaringsdeskundige.ervaringsdeskundige_onderzoek_overzicht') }}" class="btn btn-primary mb-3">Terug</a>
-{% endblock %}
-
 {% block content%}
 <div class="container-flex">
     <h1 class="spacer">Account overzicht {{ session["evd"]["gebruikersnaam"] }}</h1>
