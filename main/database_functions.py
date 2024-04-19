@@ -489,16 +489,15 @@ def get_evd_by_username(gebruikersnaam):
      return {}
 
 
-def update_account_in_database(voornaam, achternaam, postcode, geslacht, gebruikersnaam, telefoonnummer, geboortedatum, gebruikte_hulpmiddel, bijzonderheden):
+def update_account_in_database(voornaam, achternaam, postcode, geslacht, gebruikersnaam, telefoonnummer, geboortedatum, gebruikte_hulpmiddel, bijzonderheden, id, beperkingen, form):
     try:
         connection = get_db()
         cursor = connection.cursor()
-
         cursor.execute("""
             UPDATE Ervaringsdeskundige 
-            SET voornaam = ?, achternaam = ?, postcode = ?, geslacht = ?, telefoonnummer = ?, geboortedatum = ?, gebruikte_hulpmiddel = ?, bijzonderheden = ?
-            WHERE gebruikersnaam = ?
-        """, (voornaam, achternaam, postcode, geslacht, telefoonnummer, geboortedatum, gebruikte_hulpmiddel, bijzonderheden, gebruikersnaam))
+            SET voornaam = ?, achternaam = ?, postcode = ?, geslacht = ?, telefoonnummer = ?, geboortedatum = ?, gebruikte_hulpmiddel = ?, bijzonderheden = ?, gebruikersnaam = ?
+            WHERE id = ?
+        """, (voornaam, achternaam, postcode, geslacht, telefoonnummer, geboortedatum, gebruikte_hulpmiddel, bijzonderheden, gebruikersnaam, int(id),))
 
         connection.commit()
 
@@ -506,4 +505,28 @@ def update_account_in_database(voornaam, achternaam, postcode, geslacht, gebruik
     except Exception as e:
         connection.rollback()
         msg = f"Fout bij het bijwerken van de accountinformatie: {e}"
+    finally:
+        if connection:
+            cursor.close()
+        delete_evd_beperking(id)
+        for beperking_type in beperkingen:
+                for beperking in beperkingen[beperking_type]:
+                    if (form.get(str(beperking[0]))) != None:
+                        beperking = form.get(beperking[0])
+                        insert_ervaringsdeskundige_beperking_into_database(id, beperking)
     return msg
+
+def delete_evd_beperking(id):
+    try:
+        connection = get_db()
+        cursor = connection.cursor()
+        cursor.execute("""
+                        DELETE FROM Ervaringsdeskundige_beperking
+                        WHERE ervaringsdeskundige_id = ?
+                        """, (id,))
+        connection.commit()
+        cursor.close()
+    except Exception as e:
+        connection.rollback()
+    finally:
+        return

@@ -2,6 +2,7 @@
 
 {% block head %}
 <link href="/static/css/vieuw_account.css" rel="stylesheet" />
+<script src="/static/javascript/edit_account.js"></script>
 {% endblock %}
 
 {% block header %}
@@ -22,42 +23,42 @@
                     <label for="achternaam">Achternaam:</label>
                     <input type="text" class="form-control" id="achternaam" name="achternaam" value="{{ evd['achternaam'] }}">
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="postcode">Postcode</label>
                     <input type="text" class="form-control" id="postcode" name="postcode" value="{{ evd['postcode'] }}">
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="geslacht">Geslacht</label>
-                    <select class="form-control" name="Gender" id="geslacht" form="geslacht">
+                    <select class="form-control" name="geslacht" id="geslacht">
                         <option value="man" {% if evd['geslacht'] == 'man' %} selected {% endif %}>Man</option>
                         <option value="vrouw" {% if evd['geslacht'] == 'vrouw' %} selected {% endif %}>Vrouw</option>
                         <option value="anders" {% if evd['geslacht'] == 'anders' %} selected {% endif %}>Anders</option>
                     </select>
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="gebruikersnaam">Gebruikersnaam</label>
                     <input type="text" class="form-control" id="gebruikersnaam" name="gebruikersnaam" value="{{ evd['gebruikersnaam'] }}">
                 </div>
 
-                <div>
+                <div class="form-group">
                     <label for="telefoonnummer">Telefoonnummer</label>
                     <input type="text" class="form-control" id="telefoonnummer" name="telefoonnummer" value="{{ evd['telefoonnummer'] }}">
                 </div>
-            <div>
+                <div class="form-group">
                     <label for="geboortedatum">Geboortedatum</label>
                     <input type="text" class="form-control" id="geboortedatum" name="geboortedatum" value="{{ evd['geboortedatum'] }}">
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="gebruikte_hulpmiddel">Gebruikt hulpmiddel</label>
                     <input type="text" class="form-control" id="gebruikte_hulpmiddel" name="gebruikte_hulpmiddel" value="{{ evd['gebruikte_hulpmiddel'] }}">
                 </div>
-                <div>
+                <div class="form-group">
                     <label for="bijzonderheden">Bijzonderheden</label>
                     <input type="text" class="form-control" id="Bijzonderheden" name="Bijzonderheden" value="{{ evd['Bijzonderheden'] }}">
                 </div>
             </div>
             <div class="col-md-6">
-                <div>
+                <div class="form-group">
                     <label> Beperking(en):</label><br>
                 <br>
                     {% for beperking_type in beperking_dict %}

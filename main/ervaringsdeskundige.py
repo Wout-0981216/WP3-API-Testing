@@ -83,14 +83,19 @@ def update_account_post():
     voornaam = request.form.get('voornaam')
     achternaam = request.form.get('achternaam')
     postcode = request.form.get('postcode')
-    geslacht = request.form.get('Gender')
+    geslacht = request.form.get('geslacht')
     gebruikersnaam = request.form.get('gebruikersnaam')
     telefoonnummer = request.form.get('telefoonnummer')
     geboortedatum = request.form.get('geboortedatum')
     gebruikte_hulpmiddel = request.form.get('gebruikte_hulpmiddel')
     bijzonderheden = request.form.get('Bijzonderheden')
+    beperking_typen = select_type_beperkingen_from_database()
+    beperking_dict = {}
+    for beperking_typen in beperking_typen:
+        beperkingen = select_beperking_from_database_by_type(beperking_typen[0])
+        beperking_dict[beperking_typen] = beperkingen
 
-    msg = update_account_in_database(voornaam, achternaam, postcode, geslacht, gebruikersnaam, telefoonnummer, geboortedatum, gebruikte_hulpmiddel, bijzonderheden)
+    msg = update_account_in_database(voornaam, achternaam, postcode, geslacht, gebruikersnaam, telefoonnummer, geboortedatum, gebruikte_hulpmiddel, bijzonderheden, int(session["evd"]['id']), beperking_dict, request.form)
 
     flash(msg)
 
