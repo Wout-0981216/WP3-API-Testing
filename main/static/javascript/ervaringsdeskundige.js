@@ -47,7 +47,7 @@ function getResearches (type = 'beschikbaar') {
                           </div>${typeButton}</li>`
           });
           $(`#list-${type}`).html(listItems);
-          if(type == "alle") { 
+          if(type != "beschikbaar") { 
             $(`*#status_button`).css({'display': "block" });
             $('*#statusnieuw').css({'background-color': 'yellow'});
             $('*#statusgoedgekeurd').css({'background-color': 'greenyellow'});
@@ -144,7 +144,7 @@ $(document).ready(() => {
     const tab = TAB_LIST[i];
     $(`#${tab}-href`).on("click", () => {
       console.log(`#${tab}-href`);
-      if(tab == "alle") { $(`*#status_button`).css({display: "block" })}
+      if(tab != "beschikbaar") { $(`*#status_button`).css({display: "block" })}
       else { $(`*#status_button`).css({display: "none" })};
       getResearches(tab)
       $(`#${tab}`).css({ display: "block" });

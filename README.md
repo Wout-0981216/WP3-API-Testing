@@ -50,8 +50,8 @@ ook is het op dit dashboard mogelijk om nieuwe inschrijvingen op onderzoeken doo
 
 **Ervaringsdeskundige dashboard** <br/>
 
-Zodra een beheerder je als ervaringsdeskundige heeft geaccepteerd is het mogelijk om op dit dashboard te bieden op onderzoeken. ook zie je hier wat de statussen zijn van deze onderzoeken.
-Verder is het nog mogelijk om je account te bekijken.
+Zodra een beheerder je als ervaringsdeskundige heeft geaccepteerd is het mogelijk om je op dit dashboard in te schrijven op onderzoeken. ook zie je hier wat de statussen zijn van deze inschrijvingen.
+Verder is het nog mogelijk om je account te bekijken en aan te passen.
 
 **Onderzoeken inschieten via API** <br/>
 
