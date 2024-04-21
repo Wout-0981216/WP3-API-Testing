@@ -38,6 +38,7 @@ def haal_onderzoek(status):
       # uitsluiten van geregisteeredOnderzoek
       ids_to_exclude = {obj["id"] for obj in geregisteeredOnderzoek}
       result = [obj for obj in beschikbaarOnderzoeks if obj["id"] not in ids_to_exclude]
+      print(result)
       return jsonify(result)
     else: 
       onderzoeken = get_geregisteered_onderzoek({'ervaringsdeskundige_id':session['evd']["id"], 'status': newStatus})
@@ -47,7 +48,7 @@ def haal_onderzoek(status):
 def inschrijven_onderzoek_route():
     # TO DO get beheereder_id 
     # TO DO implementeer ervaringsdeskundige AUTH en beheereder
-    inschrijven_onderzoek(session['evd']["id"], request.json["id"], 1, 'nieuw', datetime.now() )
+    inschrijven_onderzoek(session['evd']["id"], request.json["id"], 1, 'afwachting', datetime.now() )
     return jsonify(request.json)
 
 @ervaringsdeskundige_blueprint.route('/ervaringsdeskundige/uitschrijven_onderzoek', methods=['PUT', 'POST'])

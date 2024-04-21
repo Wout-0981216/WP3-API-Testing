@@ -239,13 +239,21 @@ def insert_dom_data():
 def get_geregisteered_onderzoek(params = {'ervaringsdeskundige_id': -1, 'status': 'beschikbaar'}):
     connection = get_db()
     cursor = connection.cursor()
+    # in het geval dat de terms is verandere, 
+    # ER IS GEEN ENUM in de database 
+    termsForAwatingRequest = ['in-behandeling','afwachting','nieuwe']
+    termsForAcceptedRequest = ['goedgekeurd','geregisteerd']
+    termsForDenyedRequest = ['afgekeurd']
+
     if params['status'] != 'beschikbaar':
+      chosenStatue = termsForAwatingRequest if  params['status'] in  termsForAwatingRequest else  termsForAcceptedRequest if params['status'] in termsForAcceptedRequest else termsForDenyedRequest
+      print(chosenStatue)
       cursor.execute("""
       SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
       FROM Onderzoek
-      INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id
-      WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ? and Inschrijving_ervaringsdeskundige_onderzoek.status = ?
-      """, ((params['ervaringsdeskundige_id'],params['status'],)) )
+      INNER JOIN Inschrijving_ervaringsdeskundige_onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id 
+      WHERE Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id = ? and Inschrijving_ervaringsdeskundige_onderzoek.status IN ({seq})
+      """.format(seq=','.join(['?']*len(chosenStatue))),  [*[params['ervaringsdeskundige_id']   ] , *chosenStatue ])
     else: 
       cursor.execute("""
       SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
@@ -278,6 +286,9 @@ def uitschrijven_onderzoek(onderzoek_id):
 """, (onderzoek_id,))
     connection.commit()
     cursor.close()
+
+
+
  
 def get_gere_onderzoek_by_evd_id(id):
     connection = get_db()
@@ -299,15 +310,17 @@ def get_onderzoek_by_id(id):
     cursor.close()
     return dict(onderzoek) if not None else {}
 
-
 def get_inschrijvingen_op_onderzoeken():
+    statusAwaitingRequest = ['nieuwe','afwachting','in-behandeling']
+
     connection = get_db()
     cursor = connection.cursor()
-    query = ("""SELECT * FROM Inschrijving_ervaringsdeskundige_onderzoek 
+    query = """SELECT * FROM Inschrijving_ervaringsdeskundige_onderzoek 
                 INNER JOIN Ervaringsdeskundige ON Ervaringsdeskundige.id = Inschrijving_ervaringsdeskundige_onderzoek.ervaringsdeskundige_id 
                 INNER JOIN Onderzoek ON Onderzoek.id = Inschrijving_ervaringsdeskundige_onderzoek.onderzoek_id 
-                WHERE Inschrijving_ervaringsdeskundige_onderzoek.status = 'nieuw'""")
-    cursor.execute(query)
+                WHERE Inschrijving_ervaringsdeskundige_onderzoek.status IN ({seq})""".format(seq=','.join(['?']*len(statusAwaitingRequest)))
+    
+    cursor.execute(query, statusAwaitingRequest)
     inschrijving_onderzoek = cursor.fetchall()
     cursor.close()
     return inschrijving_onderzoek
