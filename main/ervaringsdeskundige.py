@@ -38,7 +38,6 @@ def haal_onderzoek(status):
       # uitsluiten van geregisteeredOnderzoek
       ids_to_exclude = {obj["id"] for obj in geregisteeredOnderzoek}
       result = [obj for obj in beschikbaarOnderzoeks if obj["id"] not in ids_to_exclude]
-      print(result)
       return jsonify(result)
     else: 
       onderzoeken = get_geregisteered_onderzoek({'ervaringsdeskundige_id':session['evd']["id"], 'status': newStatus})

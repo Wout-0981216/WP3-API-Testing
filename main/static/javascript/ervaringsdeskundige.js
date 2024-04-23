@@ -39,6 +39,16 @@ const getResearches = (type = "beschikbaar") => {
                           <span><i> ${index + 1} <i/> ${element.titel} </span>
                           <div>
                               <p>${element.beschrijving}</p>
+                              <p><b>Beschikbaar van:</b> ${element.datum_vanaf} <b>tot:</b> ${element.datum_tot}</p>
+                              <p><b>Onderzoekstype: </b>${element.type_onderzoek}</p>
+                              <p><b>Locatie: </b>${element.locatie}</p>
+                              <p><b>Leeftijds doelgroep: </b>${element.doelgroep_leeftijd_van}-${element.doelgroep_leeftijd_tot}</p>
+                              <p><b>Beperking doelgroep: </b>${element.doelgroep_beperking}</p>
+                              <p><b>Onderzoek van: </b>${element.organisatie_id}</p>
+                              <p><b>Met beloning: </b>${element.met_beloning}</p>
+                              <p><b>Beloning(indien van toepassing): </b>${element.beloning}</p>
+                              <p><b>Status: </b>${element.inschrijving_ervaringsdeskundige_onderzoek_status}</p>
+
                           </div>
                           ${typeButton}
                           </li>`;

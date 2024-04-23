@@ -10,7 +10,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
+#list-beschikbaar{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
 .list-element span {
   font-size: 18px;
   font-weight: bold;

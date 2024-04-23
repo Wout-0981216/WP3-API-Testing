@@ -53,7 +53,7 @@ def insert_ervaringsdeskundige_into_database(form, beperkingen):
       connection.commit()
       msg = "Account added"
     except Exception as e:
-        print(f"Error: {e}")
+        
         connection.rollback()
         msg = f"Error in the INSERT: {e}"
     finally:
@@ -160,7 +160,6 @@ def confirm_evd_status(id):
         connection.commit()
         msg = "status updated"
     except Exception as e:
-        print(f"Error: {e}")
         connection.rollback()
         msg = f"Error in the INSERT: {e}"
     finally:
@@ -178,7 +177,6 @@ def deny_evd_status(id):
         connection.commit()
         msg = "status updated"
     except Exception as e:
-        print(f"Error: {e}")
         connection.rollback()
         msg = f"Error in the INSERT: {e}"
     finally:
@@ -230,7 +228,7 @@ def insert_dom_data():
      connection = get_db()
      cursor = connection.cursor()
      cursor.execute('''INSERT INTO Onderzoek ("titel", "beschikbaar", "beschrijving", "datum_vanaf", "datum_tot", "type_onderzoek", "locatie", "met_beloning", "doelgroep_leeftijd_van", "doelgroep_leeftijd_tot", "organisatie_id", "status", "datum_status_update", "beheerder_id")
-     VALUES ('Nieuw onderzoek', 1, 'Dit is een nieuw onderzoek', '2024-03-07', '2024-03-14', 'Kwalitatief', 'Amsterdam', 1, 18, 60, 1, 'nieuwe', '2024-03-07 12:00:00', 1);''')
+     VALUES ('Nieuw onderzoek', 1, 'Dit is een nieuw onderzoek', '2024-03-07', '2024-03-14', 'Kwalitatief', 'Amsterdam', 1, 18, 60, 1, 'nieuw', '2024-03-07 12:00:00', 1);''')
      new_category_id = cursor.lastrowid
      connection.commit()
      cursor.close()
@@ -241,13 +239,12 @@ def get_geregisteered_onderzoek(params = {'ervaringsdeskundige_id': -1, 'status'
     cursor = connection.cursor()
     # in het geval dat de terms is verandere, 
     # ER IS GEEN ENUM in de database 
-    termsForAwatingRequest = ['in-behandeling','afwachting','nieuwe']
+    termsForAwatingRequest = ['in-behandeling','afwachting','nieuw']
     termsForAcceptedRequest = ['goedgekeurd','geregisteerd']
     termsForDenyedRequest = ['afgekeurd']
 
     if params['status'] != 'beschikbaar':
       chosenStatue = termsForAwatingRequest if  params['status'] in  termsForAwatingRequest else  termsForAcceptedRequest if params['status'] in termsForAcceptedRequest else termsForDenyedRequest
-      print(chosenStatue)
       cursor.execute("""
       SELECT Onderzoek.*, inschrijving_ervaringsdeskundige_onderzoek.status AS inschrijving_ervaringsdeskundige_onderzoek_status
       FROM Onderzoek
@@ -311,7 +308,7 @@ def get_onderzoek_by_id(id):
     return dict(onderzoek) if not None else {}
 
 def get_inschrijvingen_op_onderzoeken():
-    statusAwaitingRequest = ['nieuwe','afwachting','in-behandeling']
+    statusAwaitingRequest = ['nieuw','afwachting','in-behandeling']
 
     connection = get_db()
     cursor = connection.cursor()
@@ -352,7 +349,6 @@ def confirm_inschrijving_status(onderzoek_id):
         connection.commit()
         msg = "Status updated successfully."
     except Exception as e:
-        print(f"Error: {e}")
         connection.rollback()
         msg = f"Error in updating status: {e}"
     finally:
@@ -374,7 +370,6 @@ def deny_inschrijving_status(onderzoek_id):
         connection.commit()
         msg = "Status updated successfully."
     except Exception as e:
-        print(f"Error: {e}")
         connection.rollback()
         msg = f"Error in updating status: {e}"
     finally:
@@ -416,7 +411,6 @@ def confirm_onderzoek_status(id):
         connection.commit()
         msg = "Status updated successfully."
     except Exception as e:
-        print(f"Error: {e}")
         connection.rollback()
         msg = f"Error in updating status: {e}"
     finally:
@@ -438,7 +432,6 @@ def deny_onderzoek_status(id):
         connection.commit()
         msg = "Status updated successfully."
     except Exception as e:
-        print(f"Error: {e}")
         connection.rollback()
         msg = f"Error in updating status: {e}"
     finally:
