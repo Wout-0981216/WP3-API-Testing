@@ -54,15 +54,9 @@ def add_registration():
 @auth_blueprint.route("/login-beheerder", methods=['GET', 'POST'])
 def login_beheerder():
         if request.method == 'POST':
-            connection = get_db()
-            cursor = connection.cursor()
-            name = request.form['gebruikersnaamBh']
-            password = request.form['wachtwoordBh']
-            query = "SELECT * FROM beheerder WHERE gebruikersnaam = ?"
-            cursor.execute(query, (name,))
-            user_data = cursor.fetchone()
+            user_data = beheerder_login(request.form)
 
-            if user_data is None or user_data['wachtwoord'] != password:
+            if user_data == False:
                 flash('Foutieve gebruikersnaam/wachtwoord')
                 return render_template('login_beheerder.html')
             else:
@@ -115,12 +109,12 @@ def login_evd():
 
 
 @auth_blueprint.route("/login-ervaringsdeskundige-new", methods=['POST'])
-def login_evd_new(): 
+def login_evd_new():
      gebruikersnaam = request.form['gebruikersnaamEvd']  if request.form is not None and   request.form['gebruikersnaamEvd'] is not None  else  request.json['gebruikersnaamEvd'] if request.json  is not None and request.json['gebruikersnaamEvd']  is not None else None
      wachtwoordEvd = request.form['wachtwoordEvd']  if request.form is not None and  request.form['wachtwoordEvd'] is not None  else  request.json['wachtwoordEvd'] if request.json  is not None and request.json['wachtwoordEvd']  is not None else None
-     if user_exist(gebruikersnaam,  wachtwoordEvd):
+     exits_and_pw_correct = user_exist(gebruikersnaam,  wachtwoordEvd)
+     if exits_and_pw_correct:
       evd = get_evd_by_username(gebruikersnaam)
-      # problem with the database please hash the password
       if evd['status'] == 'nieuw':
         flash('Account is nog niet goedgekeurd door beheerder')
         return render_template('login_evd.html')
@@ -134,4 +128,3 @@ def login_evd_new():
      else:
       flash('Foutieve gebruikersnaam/wachtwoord')
       return render_template('login_evd.html')
-     

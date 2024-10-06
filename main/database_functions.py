@@ -2,6 +2,7 @@ from flask import g, flash
 import sqlite3
 import os
 import datetime
+import hashlib
 from validate import is_een_geldige_kandidaat
 current_directory = os.path.dirname(os.path.abspath(__file__))
 database_path = os.path.join(current_directory, 'lib\database', 'database.db')
@@ -20,7 +21,7 @@ def insert_ervaringsdeskundige_into_database(form, beperkingen):
     geslacht = form.get('sex')
     email = form.get('email')
     gebruikersnaam = form.get('username')
-    wachtwoord = form.get('password')
+    hashed_pw = hashlib.sha256(str(form['password']).encode()).hexdigest()
     telefoonnummer = form.get('phonenumber')
     geboortedatum = form.get('birthdate')
     gebruikte_hulpmiddel = form.get('used_accessory')
@@ -47,7 +48,7 @@ def insert_ervaringsdeskundige_into_database(form, beperkingen):
                     INSERT INTO Ervaringsdeskundige (voornaam, achternaam, postcode, geslacht, email, gebruikersnaam, wachtwoord, telefoonnummer,
                     geboortedatum, gebruikte_hulpmiddel, bijzonderheden, toezichthouder, naam_voogd_of_toezichthouder, email_adres_voogd, telefoonnummer_voogd,
                     voorkeur_benadering, type_onderzoek, bijzonderheden_beschikbaarheid, status, beheerder_id, datum_status_update) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-                    """, (voornaam,achternaam,postcode,geslacht,email,gebruikersnaam,wachtwoord,telefoonnummer,geboortedatum,gebruikte_hulpmiddel,bijzonderheden,
+                    """, (voornaam,achternaam,postcode,geslacht,email,gebruikersnaam,hashed_pw,telefoonnummer,geboortedatum,gebruikte_hulpmiddel,bijzonderheden,
                           toezichthouder,naam_voogd_of_toezichthouder,email_adres_voogd,telefoonnummer_voogd,voorkeur_benadering,type_onderzoek,bijzonderheden_beschikbaarheid,
                           status,beheerder_id,datum_status_update,))
       connection.commit()
@@ -112,15 +113,19 @@ def get_beperkingen_from_database_by_evd_id(id):
 def beheerder_login(form):
     connection = get_db()
     cursor = connection.cursor()
-    name = form.get('usernameInput')
-    wachtwoord = form.get('passwordInput')
-    query = 'SELECT wachtwoord FROM beheerder WHERE gebruikersnaam = ?'
+    name = form['gebruikersnaamBh']
+    hashed_pw = hashlib.sha256(str(form['wachtwoordBh']).encode())
+    query = "SELECT * FROM beheerder WHERE gebruikersnaam = ?"
     cursor.execute(query, (name,))
     user_data = cursor.fetchone()
     cursor.close()
-    if(user_data[0] == wachtwoord):
-        return True
+    print(hashed_pw.hexdigest(), user_data['wachtwoord'])
+    if(user_data['wachtwoord'] == hashed_pw.hexdigest()):
+        return user_data
     else: return False
+
+def evd_login(form):
+    return
 
 def get_all_evd_from_database():
     connection = get_db()
@@ -448,14 +453,14 @@ def create_beheerder():
 def user_exist(gebruikersnaam,password):     
     connection = get_db()
     cursor = connection.cursor()
-    cursor.execute("""SELECT * FROM Ervaringsdeskundige WHERE gebruikersnaam = ? and wachtwoord = ? """, (gebruikersnaam,password,) )
+    cursor.execute("""SELECT * FROM Ervaringsdeskundige WHERE gebruikersnaam = ?""", (gebruikersnaam,) )
+    password = hashlib.sha256(str(password).encode()).hexdigest()
     result = cursor.fetchone()
-    if result is None:
-        return False
-    else: 
+    if result['wachtwoord'] == password:
         return True
+    else: 
+        return False
 
-# def get_beperking_by_id(id):
 
 def get_evd_beperkinging(id): 
     connection = get_db()
